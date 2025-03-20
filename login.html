@@ -195,11 +195,19 @@
                     },1000);
                 }else{
                     Swal.fire({
-                        title: 'Success!',
-                        text: 'Pembayaran berhasil, Kami telah mengirimkan kode voucher anda melalui WhatsApp.\r\n\r\nTerima kasih atas pesanan anda.',
-                        icon: 'success'
-                    }).then((c) => {
-                        window.location.reload();
+                        title: "Transaksi Berhasil",
+                        text: "Kami telah mengirimkan kode voucher melalui WhatsApp. Apakah anda ingin menggunakannya sekarang?",
+                        icon: "success",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Ya, Sambungkan"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = `$(link-login-only)?username=${check.voucher}&password=${check.voucher}`;
+                        }else{
+                            window.location.reload();
+                        }
                     });
                 }
             });
