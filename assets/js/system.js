@@ -1,7 +1,7 @@
 class System {
     constructor() {
         this.config = new Config();
-        this.server = 'https://accounts.niceportal.net';
+        this.server = 'https://niceportal.net';
         this.params = {
             "user_id": this.config.user_id,
             "router_id": this.config.router_id
