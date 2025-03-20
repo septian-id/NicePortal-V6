@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link id="theme" rel="stylesheet" type="text/css" href="">
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
+    <style type="text/css">
+        body {
+            margin: auto;
+            max-width: 480px;
+            min-height: 100vh;
+            font-family: arial;
+            font-size: 14px;
+            color: gray;
+        }
+        .main{
+            min-height: 100vh;
+        }
+        .head {
+            min-height: 150px;
+            background-image: url('assets/images/header.jpg');
+            background-size:cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .curve {
+            width: 95%;
+            max-width: 440;
+            padding: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .nav{
+            min-height: 35px;
+            min-width: 35px;
+        }
+        input,select,texarea {
+            outline: none;
+        }
+    </style>
+    <title>Login Hotspot</title>
+</head>
+<body class="light-gray">
+    <audio id="a_click" src="assets/audio/click.wav"></audio>
+    <audio id="a_login" src="assets/audio/login.wav"></audio>
+    <audio id="a_error" src="assets/audio/error.wav"></audio>
+
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/js/sweetalert.js"></script>
+    <script type="text/javascript" src="assets/js/loadingoverlay.min.js"></script>
+    <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
+    <script type="text/javascript" src="config.js"></script>
+    <script type="text/javascript" src="assets/js/system.js"></script>
+    <script type="text/javascript">var sys = new System();</script>
+
+    <div class="hide">
+        $(if chap-id)
+            <form name="sendin" action="$(link-login-only)" method="post">
+                <input type="hidden" name="username" />
+                <input type="hidden" name="password" />
+                <input type="hidden" name="dst" value="$(link-orig)" />
+                <input type="hidden" name="popup" value="true" />
+            </form>
+            
+            <script type="text/javascript" src="assets/js/md5.js"></script>
+            <script type="text/javascript">
+                function doLogin() {
+                    switch(sys.config.session){
+                        case 'off':
+                            document.sendin.username.value = document.login.username.value;
+                            document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+                            document.sendin.submit();
+                        break;
+                        case 'on':
+                            $.LoadingOverlay("show", {
+                                image       : "",
+                                fontawesome : "fa fa-cog fa-spin",
+                                background : "rgba(0,0,0,0.5)"
+                            });
+                            sys.clear_session(document.login.username.value).then(result => {
+                                $.LoadingOverlay("hide");
+                                document.sendin.username.value = document.login.username.value;
+                                document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+                                document.sendin.submit();
+                                console.log(result);
+                            });
+                            return false;
+                        break;
+                    }
+                    return false;
+                }
+            </script>
+        $(endif)
+    </div>
+    <div class="main white">
+        <div class="head display-container theme">
+            <div class="display-bottommiddle padding white curve">
+                <i class="fa fa-wifi fa-2x text-theme right"></i>
+                <b id="hotspot_name" class="text-theme">Selamat Datang</b><br>
+                <i class="text-gray small">Silahkan masukan kode voucher anda</i>
+            </div>
+        </div>
+        <div class="padding">
+            <form name="login" action="$(link-login-only)" method="post" $(if chap-id) onSubmit="return doLogin()" $(endif)>
+                <input type="hidden" name="dst" value="$(link-orig)">
+                <input type="hidden" name="popup" value="true">
+                <input type="text" id="username" name="username" class="input border round light-gray margin-bottom text-theme" style="font-weight: 600;" placeholder="Kode Voucher" required>
+                <input type="hidden" id="password" name="password" class="input border round light-gray margin-bottom" placeholder="Password" required>
+                <button id="btnLogin" class="button block theme round margin-bottom">Masuk</button>
+            </form>
+
+            <div class="row margin-top margin-bottom">
+                <div class="col s3 center">
+                    <button id="btnMode" state="voucher" class="nav button small padding-small round theme-l5 border border-theme">
+                        <i class="fa fa-user fa-lg text-theme"></i>
+                    </button>
+                </div>
+                <div class="col s3 center">
+                    <button class="nav button small padding-small round theme-l5 border border-theme">
+                        <i class="fa fa-whatsapp fa-lg text-theme"></i>
+                    </button>
+                </div>
+                <div class="col s3 center">
+                    <button class="nav button small padding-small round theme-l5 border border-theme">
+                        <i class="fa fa-life-buoy fa-lg text-theme"></i>
+                    </button>
+                </div>
+                <div class="col s3 center">
+                    <button class="nav button small padding-small round theme-l5 border border-theme">
+                        <i class="fa fa-bullhorn fa-lg text-theme"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="leftbar border-pale-red padding text-gray margin-bottom small">
+                <b>Belum Punya Voucher?</b><br>Berikut adalah daftar harga voucher kami, Silahkan klik tombol "Beli" dan lengkapi identitasnya ya..
+            </div>
+
+            <div id="products" class="row"></div>
+        </div>
+    </div>
+
+    <div class="display-middle white border round card-4 padding" id="frmCheckout" style="display:none;min-width:320px;max-width:320px">
+        <button class="button small padding-small red round right" onclick="$('#frmCheckout').hide()"><i class="fa fa-times"></i></button>
+        <p align="center">
+            <b class="text-theme">Beli Voucher</b>
+        </p>
+        <p align="center">
+            Silahkan lengkapi indentitas anda
+        </p>
+        <span class="text-theme">Nama Depan</span>
+        <input type="hidden" id="product_id">
+        <input type="text" id="first_name" class="input border round margin-bottom">
+        <span class="text-theme">Nama Belakang</span>
+        <input type="text" id="last_name" class="input border round margin-bottom">
+        <span class="text-theme">Nomor WhatsApp</span>
+        <input type="number" id="phone" class="input border round margin-bottom">
+        <p align="center" class="light-gray small padding">
+            Kami akan mengirimkan kode voucher melalui WhatsApp, Pastikan data yang anda masukan sudah sesuai.
+        </p>
+        <button id="btnCheckout" class="button block theme round margin-bottom">Checkout</button>
+    </div>
+
+    <div class="display-middle white border round card-4 padding" id="frmQrcode" style="display:none;min-width:320px;max-width:320px">
+        <button class="button small padding-small red round right" onclick="$('#frmQrcode').hide()"><i class="fa fa-times"></i></button>
+        <p align="center">
+            <b class="text-theme">Pembayaran</b>
+        </p>
+        <p align="center">
+            Silahkan lakukan pembayaran melalui QRIS menggunakan aplikasi pembayaran anda.
+        </p>
+        <div style="display: flex; justify-content: center; text-align: center;" id="qrcode"></div>
+        <p align="center" class="padding small light-gray">
+            Lakukan pembayaran sebelum<br><b id="expiry_time" class="text-orange"></b>
+        </p>
+
+        <p align="center" class="small">
+            Pembayaran anda akan terkonfirmasi otomatis oleh system kami, Kode voucher akan terkirim otomatis melalui WhatsApp.
+        </p>
+        <p align="center">
+            <img src="assets/images/qris.png" class="image" style="width:50%">
+        </p>
+    </div>
+
+    
+    <script type="text/javascript">
+        function get_status(order_id){
+            sys.get_status(order_id).then((check) => {
+                console.log(check);
+                if(check.status == 'pending'){
+                    setTimeout(function(){
+                        get_status(order_id);
+                    },1000);
+                }else{
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Pembayaran berhasil, Kami telah mengirimkan kode voucher anda melalui WhatsApp.\r\n\r\nTerima kasih atas pesanan anda.',
+                        icon: 'success'
+                    }).then((c) => {
+                        window.location.reload();
+                    });
+                }
+            });
+        }
+        $(document).ready(function() {
+            $('#theme').attr('href', `assets/css/${sys.config.color}`);
+            sys.get_info().then(info => {
+                sys.config.session = info.session;
+                sys.get_product().then(result => {
+                    $.each(result, (x, r) => {
+                        $('#products').append(`
+                            <div class="col s6 margin-bottom padding-small">
+                                <div class="light-gray padding-small round">
+                                    <button product_id="${r.product_id}" class="checkout button round small padding-small theme right"><i class="fa fa-shopping-cart"></i> Beli</button>
+                                    <b class="text-theme">${r.name}</b><br>
+                                    <span class="text-gray">${r.price}</span>
+                                </div>
+                            </div>
+                        `);
+                    });
+                    var checkout = document.getElementsByClassName('checkout');
+                    for (x = 0; x < checkout.length; x++) {
+                        checkout[x].addEventListener('click', function() {
+                            var product_id = this.getAttribute('product_id');
+                            $('#product_id').val(product_id);
+                            $('#frmCheckout').show();
+                        });
+                    }
+                    $.LoadingOverlay("hide");
+                });
+            });
+
+            $('#btnCheckout').on('click',
+                function() {
+                    $.LoadingOverlay("show", {
+                        image       : "",
+                        fontawesome : "fa fa-cog fa-spin",
+                        background : "rgba(0,0,0,0.5)"
+                    });
+                    $('#frmCheckout').hide();
+                    if ($('#first_name').val() !== '' && $('#phone').val() !== '') {
+                        sys.checkout({
+                            "product_id": $('#product_id').val(),
+                            "first_name": $('#first_name').val(),
+                            "last_name": $('#last_name').val(),
+                            "phone": $('#phone').val(),
+                            "email": ""
+                        }).then(result => {
+                            $('#product_id').val('');
+                            $('#first_name').val('');
+                            $('#last_name').val('');
+                            $('#phone').val('');
+                            $('#email').val('');
+                            if (typeof result.qr_string !== null) {
+                                $('#qrcode').html('');
+                                var qrcode = new QRCode("qrcode", {
+                                    text: result.qr_string,
+                                    width: 176,
+                                    height: 176,
+                                    colorDark: "#000000",
+                                    colorLight: "#ffffff",
+                                    correctLevel: QRCode.CorrectLevel.H
+                                });
+                                
+                                $('#frmQrcode').show();
+                                $('#expiry_time').html(result.expiry_time);
+
+                                get_status(result.order_id);
+                                
+                                $.LoadingOverlay("hide");
+                            } else {
+                                $.LoadingOverlay("hide");
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Gagal membuat pesanan, Silahkan coba beberapa saat lagi.',
+                                    icon: 'error'
+                                });
+                            }
+                            console.log(result);
+                        });
+                    } else {
+                        $.LoadingOverlay("hide");
+                        Swal.fire({
+                            title: 'Warning!',
+                            text: 'Data yang anda masukan belum lengkap!',
+                            icon: 'warning'
+                        });
+                    }
+                });
+
+            var user = document.getElementById('username');
+            var pass = document.getElementById('password');
+            function sync(){
+                user.value = user.value;
+                pass.value = user.value;
+            }
+            user.onkeyup = sync;
+            user.onchange = sync;
+
+            $('#btnMode').on('click', function(){
+                user.value = '';
+                pass.value = '';
+                switch($('#btnMode').attr('state')){
+                    case 'voucher':
+                        user.placeholder = 'Username';
+                        user.onkeyup = '';
+                        user.onchange = '';
+                        pass.type = 'password';
+                        $('#btnMode').attr('state', 'member');
+                    break;
+                    case 'member':
+                        user.placeholder = 'Kode Voucher';
+                        user.onkeyup = sync;
+                        user.onchange = sync;
+                        pass.type = 'hidden';
+                        $('#btnMode').attr('state', 'voucher');
+                    break;
+                }
+            });
+
+            $('#btnLogin').on('click', function(){
+                var a_login = document.getElementById('a_login');
+                a_login.play();
+            });
+            $('*').on('click', function(){
+                var a_click = document.getElementById("a_click");
+                a_click.play();
+            });
+        });
+    </script>
+    <div class="hide">
+        $(if error)
+            <script type="text/javascript">
+                var a_error = document.getElementById('a_error');
+                a_error.play();
+                Swal.fire({
+                    title: "Error!",
+                    text: "$(error)",
+                    icon: "error"
+                }).then((r) => {
+                    var a_error = document.getElementById('a_error');
+                    a_error.play();
+                });
+            </script>
+        $(endif)
+    </div>
+</body>
+</html>
