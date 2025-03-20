@@ -8,8 +8,8 @@ Untuk mendapakan user_id dan router_id silahkan kunjungi website https://nicepor
 ```js
 class Config{
     constructor(){
-        this.user_id = '72SGPJZV22H07UJQ';
-        this.router_id = 'Q2J24W13IY8JKOPR';
+        this.user_id = 'USER ID ANDA';
+        this.router_id = 'ROUTER ID ANDA';
         
         this.color = 'theme-green.css';
     }
