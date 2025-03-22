@@ -51,7 +51,7 @@
     <script type="text/javascript" src="assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="assets/js/sweetalert.js"></script>
     <script type="text/javascript" src="assets/js/loadingoverlay.min.js"></script>
-    <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
+    <script type="text/javascript" src="assets/qr-code/qr-code.js"></script>
     <script type="text/javascript" src="config.js"></script>
     <script type="text/javascript" src="assets/js/system.js"></script>
     <script type="text/javascript">var sys = new System();</script>
@@ -263,14 +263,13 @@
                             $('#email').val('');
                             if (typeof result.qr_string !== null) {
                                 $('#qrcode').html('');
-                                var qrcode = new QRCode("qrcode", {
-                                    text: result.qr_string,
-                                    width: 176,
-                                    height: 176,
-                                    colorDark: "#000000",
-                                    colorLight: "#ffffff",
-                                    correctLevel: QRCode.CorrectLevel.H
-                                });
+                                $('#qrcode').html(`
+                                    <qr-code id="qr"
+                                        contents="${result.qr_string}"
+                                        style="width: 200px;height: 200px;margin-left: auto;margin-right: auto;">
+                                        <img src="assets/images/logo.png" width="37" height="37" slot="icon" />
+                                    </qr-code>
+                                `);
                                 
                                 $('#frmQrcode').show();
                                 $('#expiry_time').html(result.expiry_time);
