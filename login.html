@@ -145,7 +145,7 @@
             <div id="products" class="row"></div>
 
             <div class="leftbar border-pale-red padding text-gray margin-bottom small">
-                <b class="text-orange">Ada Masalah?</b><br>Silahkan hubungi kami melalui WhatsApp<br><b>08xxxxxxxxxx (admin)</b>
+                <b class="text-orange">Ada Masalah?</b><br>Silahkan hubungi kami melalui WhatsApp<br><b>085117018997 (Septian)</b>
             </div>
         </div>
     </div>
@@ -256,7 +256,12 @@
                         background : "rgba(0,0,0,0.5)"
                     });
                     $('#frmCheckout').hide();
-                    if ($('#first_name').val() !== '' && $('#phone').val() !== '') {
+                    if ($('#first_name').val() !== ''
+                        && $('#first_name').val().length < 13 
+                        && $('#last_name').val() !== ''
+                        && $('#last_name').val().length < 13
+                        && $('#phone').val() !== ''
+                        && $('#phone').val().length < 14 ){
                         sys.checkout({
                             "product_id": $('#product_id').val(),
                             "first_name": $('#first_name').val(),
@@ -299,7 +304,7 @@
                         $.LoadingOverlay("hide");
                         Swal.fire({
                             title: 'Warning!',
-                            text: 'Data yang anda masukan belum lengkap!',
+                            text: 'Data yang anda masukan belum lengkap atau tidak valid! Harap masukan data yang sesuai.',
                             icon: 'warning'
                         });
                     }
