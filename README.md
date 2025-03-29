@@ -33,7 +33,7 @@ add action=accept disabled=no comment="NICEPORTAL" dst-host="niceportal.net";
 - ![#ff5722](https://placehold.co/15x15/ff5722/ff5722.png) `7 - theme-deep-orange.css`
 - ![#673ab7](https://placehold.co/15x15/673ab7/673ab7.png) `8 - theme-deep-purple.css`
 - ![#4caf50](https://placehold.co/15x15/4caf50/4caf50.png) `9 - theme-green.css`
-- ![#3f51b5](https://placehold.co/15x15/3f51b5/3f51b5.png) `10 - theme-indogo.css`
+- ![#3f51b5](https://placehold.co/15x15/3f51b5/3f51b5.png) `10 - theme-indigo.css`
 - ![#87ceeb](https://placehold.co/15x15/87ceeb/87ceeb.png) `11 - theme-light-blue.css`
 - ![#8bc34a](https://placehold.co/15x15/8bc34a/8bc34a.png) `12 - theme-light-green.css`
 - ![#cddc39](https://placehold.co/15x15/cddc39/cddc39.png) `13 - theme-lime.css`
