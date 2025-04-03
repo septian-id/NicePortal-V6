@@ -145,7 +145,7 @@
             <div id="products" class="row"></div>
 
             <div class="leftbar border-pale-red padding text-gray margin-bottom small">
-                <b class="text-orange">Ada Masalah?</b><br>Silahkan hubungi kami melalui WhatsApp<br><b>08XXXXXXXXXX (Admin)</b>
+                <b class="text-orange">Ada Masalah?</b><br>Silahkan hubungi kami melalui WhatsApp<br><b>085117018997 (Septian)</b>
             </div>
         </div>
     </div>
@@ -202,21 +202,23 @@
                         get_status(order_id);
                     },1000);
                 }else{
-                    Swal.fire({
-                        title: "Transaksi Berhasil",
-                        text: "Kami telah mengirimkan kode voucher melalui WhatsApp. Apakah anda ingin menggunakannya sekarang?",
-                        icon: "success",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Ya, Sambungkan"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = `$(link-login-only)?username=${check.voucher}&password=${check.voucher}`;
-                        }else{
-                            window.location.reload();
-                        }
-                    });
+                    if(check.status == 'settlement'){
+                        Swal.fire({
+                            title: "Transaksi Berhasil",
+                            text: "Kami telah mengirimkan kode voucher melalui WhatsApp. Apakah anda ingin menggunakannya sekarang?",
+                            icon: "success",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Ya, Sambungkan"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = `$(link-login-only)?username=${check.voucher}&password=${check.voucher}`;
+                            }else{
+                                window.location.reload();
+                            }
+                        });
+                    }
                 }
             });
         }
