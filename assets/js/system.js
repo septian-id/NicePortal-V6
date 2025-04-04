@@ -100,6 +100,7 @@ class System {
     }
 
     async registration(customer){
+        this.params.id_card = customer.id_card;
         this.params.first_name = customer.first_name;
         this.params.last_name = customer.last_name;
         this.params.phone = customer.phone;
