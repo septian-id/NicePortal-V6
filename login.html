@@ -121,21 +121,26 @@
                     <button id="btnMode" state="voucher" class="nav button small padding-small round theme-l5 border border-theme">
                         <i class="fa fa-user fa-lg text-theme"></i>
                     </button>
+                    <br><span class="text-gray small">Mode</span>
+                </div>
+                <div class="col s3 center">
+                    <button id="btnRegistration" class="nav button small padding-small round theme-l5 border border-theme">
+                        <i class="fa fa-edit fa-lg text-theme"></i>
+                    </button>
+                    <br><span class="text-gray small">Pendaftaran</span>
+                </div>
+
+                <div class="col s3 center">
+                    <button class="nav button small padding-small round theme-l5 border border-theme">
+                        <i class="fa fa-life-buoy fa-lg text-theme"></i>
+                    </button>
+                    <br><span class="text-gray small">Bantuan</span>
                 </div>
                 <div class="col s3 center">
                     <button class="nav button small padding-small round theme-l5 border border-theme">
                         <i class="fa fa-whatsapp fa-lg text-theme"></i>
                     </button>
-                </div>
-                <div class="col s3 center">
-                    <button class="nav button small padding-small round theme-l5 border border-theme">
-                        <i class="fa fa-life-buoy fa-lg text-theme"></i>
-                    </button>
-                </div>
-                <div class="col s3 center">
-                    <button class="nav button small padding-small round theme-l5 border border-theme">
-                        <i class="fa fa-bullhorn fa-lg text-theme"></i>
-                    </button>
+                    <br><span class="text-gray small">Kontak</span>
                 </div>
             </div>
             <div class="leftbar border-pale-red padding text-gray margin-bottom small">
@@ -346,6 +351,11 @@
                 var a_login = document.getElementById('a_login');
                 a_login.play();
             });
+
+            $('#btnRegistration').on('click', function(){
+                window.location.href = 'registration.html';
+            });
+
             $('*').on('click', function(){
                 var a_click = document.getElementById("a_click");
                 a_click.play();

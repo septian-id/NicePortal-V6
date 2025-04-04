@@ -98,4 +98,24 @@ class System {
             });
         });
     }
+
+    async registration(customer){
+        this.params.first_name = customer.first_name;
+        this.params.last_name = customer.last_name;
+        this.params.phone = customer.phone;
+        this.params.address = customer.address;
+        return new Promise(resolve => {
+            $.ajax({
+                url: `${this.server}/api/registration`,
+                type: 'POST',
+                data: JSON.stringify(this.params),
+                success: (result) => {
+                    resolve(result);
+                },
+                error: (err) => {
+                    resolve(err);
+                }
+            });
+        });
+    }
 }
