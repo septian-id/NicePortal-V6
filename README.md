@@ -112,6 +112,7 @@ Contoh Response
 
 ### Permintaan Transaksi
 ```js
+const app = new System();
 $(document).ready((e) => {
     app.checkout({
         "product_id": "ID PRODUK",
@@ -154,6 +155,7 @@ Anda dapat harus membuat response (qr_string) menjadi sebuah QR Code agar dapat 
 
 ### Cek Status Transaksi
 ```js
+const app = new System();
 $(document).ready((e) => {
     app.get_status(ORDER_ID_XXXXX).then(result => {
         console.log(result);
