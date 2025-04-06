@@ -23,7 +23,7 @@ add action=accept disabled=no comment="NICEPORTAL" dst-host="niceportal.net";
 ```
 
 ### PILIHAN WARNA
-- ![#ffc107](https://placehold.co/15x15/ffc107/ffc107.png) `0 - theme-ambes.css`
+- ![#ffc107](https://placehold.co/15x15/ffc107/ffc107.png) `0 - theme-amber.css`
 - ![#000000](https://placehold.co/15x15/000000/000000.png) `1 - theme-black.css`
 - ![#f44336](https://placehold.co/15x15/f44336/f44336.png) `2 - theme-red.css`
 - ![#607d8b](https://placehold.co/15x15/607d8b/607d8b.png) `3 - theme-blue-grey.css`
