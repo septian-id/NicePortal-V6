@@ -163,11 +163,10 @@
         <p align="center">
             Silahkan lengkapi indentitas anda
         </p>
-        <span class="text-theme">Nama Depan</span>
         <input type="hidden" id="product_id">
-        <input type="text" id="first_name" class="input border round margin-bottom">
-        <span class="text-theme">Nama Belakang</span>
-        <input type="text" id="last_name" class="input border round margin-bottom">
+        <span class="text-theme">Nama Lengkap</span>
+        <input type="text" id="full_name" class="input border round margin-bottom">
+
         <span class="text-theme">Nomor WhatsApp</span>
         <input type="number" id="phone" class="input border round margin-bottom">
         <p align="center" class="light-gray small padding">
@@ -263,16 +262,18 @@
                         background : "rgba(0,0,0,0.5)"
                     });
                     $('#frmCheckout').hide();
-                    if ($('#first_name').val() !== ''
-                        && $('#first_name').val().length < 13 
-                        && $('#last_name').val() !== ''
-                        && $('#last_name').val().length < 13
+
+                    if ($('#full_name').val() !== ''
+                        && $('#full_name').val().length < 32 
                         && $('#phone').val() !== ''
                         && $('#phone').val().length < 14 ){
+                        var name = $('#full_name').val();
+                        var first_name = name.split(' ')[0];
+                        var last_name = name.split(' ')[1];
                         sys.checkout({
                             "product_id": $('#product_id').val(),
-                            "first_name": $('#first_name').val(),
-                            "last_name": $('#last_name').val(),
+                            "first_name": first_name !== undefined ? first_name : '',
+                            "last_name": last_name !== undefined ? last_name : '',
                             "phone": $('#phone').val(),
                             "email": ""
                         }).then(result => {
