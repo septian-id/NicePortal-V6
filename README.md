@@ -16,10 +16,14 @@ class Config{
 }
 ```
 
-Bypass Server URL :
+[ Required ] Bypass Server URL :
 ```rsc
 /ip hotspot walled-garden ip
 add action=accept disabled=no dst-host="niceportal.net" comment="NicePortal";
+```
+[ Optional ] Bypass Aplikasi Pembayaran :
+```rsc
+/ip hotspot walled-garden ip
 add dst-address=103.153.169.11 action=accept comment="SeaBank";
 add dst-address=103.153.168.5 action=accept comment="SeaBank";
 add dst-address=103.153.168.5 action=accept comment="SeaBank";
