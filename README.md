@@ -77,7 +77,7 @@ Contoh Response
 ```js
     const app = new System();
     $(document).ready((e) => {
-        app.get_info().then(result => {
+        app.get_product().then(result => {
             console.log(result);
         });
     });
