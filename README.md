@@ -19,7 +19,12 @@ class Config{
 Bypass Server URL :
 ```rsc
 /ip hotspot walled-garden ip
-add action=accept disabled=no comment="NICEPORTAL" dst-host="niceportal.net";
+add action=accept disabled=no dst-host="niceportal.net" comment="NicePortal";
+add dst-address=103.153.169.11 action=accept comment="SeaBank";
+add dst-address=103.153.168.5 action=accept comment="SeaBank";
+add dst-address=103.153.168.5 action=accept comment="SeaBank";
+add dst-host="m.dana.id" action=accept comment="Dana";
+add dst-host="dana.id" action=accept comment="Dana";
 ```
 
 ### PILIHAN WARNA
