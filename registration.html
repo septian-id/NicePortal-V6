@@ -67,6 +67,9 @@
             </div>
         </div>
         <div class="padding">
+            <span class="text-theme">NIK</span>
+            <input type="number" id="id_card" class="input border round margin-bottom theme-l5">
+
             <span class="text-theme">Nama Depan</span>
             <input type="text" id="first_name" class="input border round margin-bottom theme-l5">
 
@@ -78,7 +81,7 @@
 
             <span class="text-theme">Alamat Pemasangan</span>
             <textarea id="address" class="input border round margin-bottom theme-l5"></textarea>
-
+            
             <button id="btnSubmit" class="button round theme block">Daftar</button>
         </div>
     </div>
@@ -86,12 +89,14 @@
         $(document).ready((e) => {
             $('#theme').attr('href', `assets/css/${sys.config.color}`);
             $('#btnSubmit').on('click', (f) => {
+                var id_card = $('#id_card').val();
                 var first_name = $('#first_name').val();
                 var last_name = $('#last_name').val();
                 var phone = $('#phone').val();
                 var address = $('#address').val();
                 if(first_name !== '' && last_name !== '' && phone !== '' && address !== ''){
                     sys.registration({
+                        "id_card" : id_card,
                         "first_name" : first_name,
                         "last_name" : last_name,
                         "phone" : phone,
