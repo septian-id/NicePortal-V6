@@ -282,7 +282,7 @@
                 });
 
                 sys.get_images().then(images => {
-                    if(images.lengt > 0){
+                    if(images.length > 0){
                         $.each(images, (x, r) => {
                             $('#slides').append(`
                                 <img class="mySlides" src="${sys.server}/assets/upload/${r.file}" style="width:100%">
