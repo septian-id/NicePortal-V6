@@ -44,6 +44,38 @@ class System {
         });
     }
 
+    async get_notice(){
+        return new Promise(resolve => {
+            $.ajax({
+                url: `${this.server}/api/notice`,
+                type: 'POST',
+                data: JSON.stringify(this.params),
+                success: (result) => {
+                    resolve(result);
+                },
+                error: (err) => {
+                    resolve(err);
+                }
+            });
+        });
+    }
+
+    async get_images(){
+        return new Promise(resolve => {
+            $.ajax({
+                url: `${this.server}/api/slideshow`,
+                type: 'POST',
+                data: JSON.stringify(this.params),
+                success: (result) => {
+                    resolve(result);
+                },
+                error: (err) => {
+                    resolve(err);
+                }
+            });
+        });
+    }
+
     async checkout(data) {
         return new Promise(resolve => {
             this.params.product_id = data.product_id;

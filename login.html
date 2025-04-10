@@ -7,6 +7,10 @@
     <link id="theme" rel="stylesheet" type="text/css" href="">
     <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
     <style type="text/css">
+        html{
+            background: #222;
+            color: #FFF;
+        }
         body {
             margin: auto;
             max-width: 480px;
@@ -20,10 +24,6 @@
         }
         .head {
             min-height: 150px;
-            background-image: url('assets/images/banner.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
         }
 
         .curve {
@@ -40,14 +40,13 @@
         input,select,texarea {
             outline: none;
         }
+        .mySlides {display:none}
+        .left, .right, .badge {cursor:pointer}
+        .badge {height:13px;width:13px;padding:0}
     </style>
     <title>Login Hotspot</title>
 </head>
 <body class="light-gray">
-    <audio id="a_click" src="assets/audio/click.wav"></audio>
-    <audio id="a_login" src="assets/audio/login.wav"></audio>
-    <audio id="a_error" src="assets/audio/error.wav"></audio>
-
     <script type="text/javascript" src="assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="assets/js/sweetalert.js"></script>
     <script type="text/javascript" src="assets/js/loadingoverlay.min.js"></script>
@@ -95,6 +94,7 @@
             </script>
         $(endif)
     </div>
+
     <div class="main white">
         <div class="head display-container theme">
             <div class="padding">
@@ -143,15 +143,15 @@
                     <br><span class="text-gray small">Kontak</span>
                 </div>
             </div>
+            <div id="slides" class="content display-container" style="width: 100%;">
+                
+            </div>
             <div class="leftbar border-pale-red padding text-gray margin-bottom small">
                 <b class="text-orange">Belum Punya Voucher?</b><br>Berikut adalah daftar harga voucher kami, Silahkan klik tombol "Beli" dan lengkapi identitasnya ya..
             </div>
 
             <div id="products" class="row"></div>
-
-            <div class="leftbar border-pale-red padding text-gray margin-bottom small">
-                <b class="text-orange">Ada Masalah?</b><br>Silahkan hubungi kami melalui WhatsApp<br><b>085117018997 (Septian)</b>
-            </div>
+            <div id="notice"></div>
         </div>
     </div>
 
@@ -198,6 +198,24 @@
 
     
     <script type="text/javascript">
+        var slideIndex = 1;
+        
+        function plusDivs(n) {showDivs(slideIndex += n);}
+
+        function currentDiv(n) {showDivs(slideIndex = n);}
+
+        function showDivs(n) {
+            var i;
+            var x = document.getElementsByClassName("mySlides");
+
+            if (n > x.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = x.length}
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";  
+            } 
+            x[slideIndex-1].style.display = "block"; 
+        }
+
         function get_status(order_id){
             sys.get_status(order_id).then((check) => {
                 console.log(check);
@@ -230,6 +248,7 @@
             $('#theme').attr('href', `assets/css/${sys.config.color}`);
             sys.get_info().then(info => {
                 sys.config.session = info.session;
+                document.title = info.name;
                 sys.get_product().then(result => {
                     $.each(result, (x, r) => {
                         $('#products').append(`
@@ -250,7 +269,28 @@
                             $('#frmCheckout').show();
                         });
                     }
-                    $.LoadingOverlay("hide");
+                });
+
+                sys.get_notice().then(notice => {
+                    $.each(notice, (x,r) => {
+                        $('#notice').append(`
+                            <div class="leftbar border-pale-red padding text-gray margin-bottom small">
+                                <b class="text-orange">${r.title}</b><br>${r.content}</b>
+                            </div>
+                        `);
+                    });
+                });
+
+                sys.get_images().then(images => {
+                    $.each(images, (x, r) => {
+                        $('#slides').append(`
+                            <img class="mySlides" src="${sys.server}/assets/upload/${r.file}" style="width:100%">
+                        `);
+                    });
+                    showDivs(slideIndex);
+                    setInterval(function(){
+                        plusDivs(+1);
+                    },3000);
                 });
             });
 
@@ -347,18 +387,9 @@
                 }
             });
 
-            $('#btnLogin').on('click', function(){
-                var a_login = document.getElementById('a_login');
-                a_login.play();
-            });
 
             $('#btnRegistration').on('click', function(){
                 window.location.href = 'registration.html';
-            });
-
-            $('*').on('click', function(){
-                var a_click = document.getElementById("a_click");
-                a_click.play();
             });
         });
 
@@ -407,15 +438,10 @@
     <div class="hide">
         $(if error)
             <script type="text/javascript">
-                var a_error = document.getElementById('a_error');
-                a_error.play();
                 Swal.fire({
                     title: "Error!",
                     text: "$(error)",
                     icon: "error"
-                }).then((r) => {
-                    var a_error = document.getElementById('a_error');
-                    a_error.play();
                 });
             </script>
         $(endif)
