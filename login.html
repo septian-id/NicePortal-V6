@@ -199,11 +199,8 @@
     
     <script type="text/javascript">
         var slideIndex = 1;
-        
         function plusDivs(n) {showDivs(slideIndex += n);}
-
         function currentDiv(n) {showDivs(slideIndex = n);}
-
         function showDivs(n) {
             var i;
             var x = document.getElementsByClassName("mySlides");
@@ -244,6 +241,17 @@
                 }
             });
         }
+
+        var user = document.getElementById('username');
+        var pass = document.getElementById('password');
+
+        function sync(){
+            user.value = user.value;
+            pass.value = user.value;
+        }
+        user.onkeyup = sync;
+        user.onchange = sync;
+        
         $(document).ready(function() {
             $('#theme').attr('href', `assets/css/${sys.config.color}`);
             sys.get_info().then(info => {
@@ -358,15 +366,6 @@
                         });
                     }
                 });
-
-            var user = document.getElementById('username');
-            var pass = document.getElementById('password');
-            function sync(){
-                user.value = user.value;
-                pass.value = user.value;
-            }
-            user.onkeyup = sync;
-            user.onchange = sync;
 
             $('#btnMode').on('click', function(){
                 user.value = '';
