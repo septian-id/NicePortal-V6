@@ -144,7 +144,7 @@
                 </div>
             </div>
             <div id="slides" class="content display-container" style="width: 100%;">
-                
+
             </div>
             <div class="leftbar border-pale-red padding text-gray margin-bottom small">
                 <b class="text-orange">Belum Punya Voucher?</b><br>Berikut adalah daftar harga voucher kami, Silahkan klik tombol "Beli" dan lengkapi identitasnya ya..
@@ -282,15 +282,17 @@
                 });
 
                 sys.get_images().then(images => {
-                    $.each(images, (x, r) => {
-                        $('#slides').append(`
-                            <img class="mySlides" src="${sys.server}/assets/upload/${r.file}" style="width:100%">
-                        `);
-                    });
-                    showDivs(slideIndex);
-                    setInterval(function(){
-                        plusDivs(+1);
-                    },3000);
+                    if(images.lengt > 0){
+                        $.each(images, (x, r) => {
+                            $('#slides').append(`
+                                <img class="mySlides" src="${sys.server}/assets/upload/${r.file}" style="width:100%">
+                            `);
+                        });
+                        showDivs(slideIndex);
+                        setInterval(function(){
+                            plusDivs(+1);
+                        },3000);
+                    }
                 });
             });
 
