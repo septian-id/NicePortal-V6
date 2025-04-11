@@ -199,68 +199,79 @@
     </div>
 
     
-    <script type="text/javascript">
-        var slideIndex = 1;
-        function plusDivs(n) {showDivs(slideIndex += n);}
-        function currentDiv(n) {showDivs(slideIndex = n);}
-        function showDivs(n) {
-            var i;
-            var x = document.getElementsByClassName("mySlides");
-            if (n > x.length){slideIndex = 1;}
-            if(n < 1) {slideIndex = x.length;}
-            for(i = 0; i<x.length; i++){
-                x[i].style.display = "none";
-            }
-            x[slideIndex-1].style.display = "block"; 
-        }
-        
-        function get_status(order_id){
-            sys.get_status(order_id).then((check) => {
-                console.log(check);
-                if(check.status == 'pending'){
-                    setTimeout(function(){
-                        get_status(order_id);
-                    },1000);
-                }else{
-                    if(check.status == 'settlement'){
-                        Swal.fire({
-                            title: "Transaksi Berhasil",
-                            text: "Kami telah mengirimkan kode voucher melalui WhatsApp. Apakah anda ingin menggunakannya sekarang?",
-                            icon: "success",
-                            showCancelButton: true,
-                            confirmButtonColor: "#3085d6",
-                            cancelButtonColor: "#d33",
-                            confirmButtonText: "Ya, Sambungkan"
-                        }).then((result) => {
-                            if(result.isConfirmed){
-                                window.location.href = `$(link-login-only)?username=${check.voucher}&password=${check.voucher}`;
-                            }else{
-                                window.location.reload();
-                            }
-                        });
+<script type="text/javascript">
+var slideIndex = 1;
+
+function plusDivs(n) {
+    showDivs(slideIndex += n);
+}
+
+function currentDiv(n) {
+    showDivs(slideIndex = n);
+}
+
+function showDivs(n) {
+    var i;
+    var x = document.getElementsByClassName("mySlides");
+    if (n > x.length) {
+        slideIndex = 1;
+    }
+    if (n < 1) {
+        slideIndex = x.length;
+    }
+    for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    x[slideIndex - 1].style.display = "block";
+}
+
+function get_status(order_id) {
+    sys.get_status(order_id).then((check) => {
+        console.log(check);
+        if (check.status == 'pending') {
+            setTimeout(function() {
+                get_status(order_id);
+            }, 1000);
+        } else {
+            if (check.status == 'settlement') {
+                Swal.fire({
+                    title: "Transaksi Berhasil",
+                    text: "Kami telah mengirimkan kode voucher melalui WhatsApp. Apakah anda ingin menggunakannya sekarang?",
+                    icon: "success",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ya, Sambungkan"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `$(link-login-only)?username=${check.voucher}&password=${check.voucher}`;
+                    } else {
+                        window.location.reload();
                     }
-                }
-            });
+                });
+            }
         }
+    });
+}
 
-        var user = document.getElementById('username');
-        var pass = document.getElementById('password');
+var user = document.getElementById('username');
+var pass = document.getElementById('password');
 
-        function set_password(){
-            user.value = user.value;
-            pass.value = user.value;
-        }
-        user.onkeyup = set_password;
-        user.onchange = set_password;
+function set_password() {
+    user.value = user.value;
+    pass.value = user.value;
+}
+user.onkeyup = set_password;
+user.onchange = set_password;
 
-        $(document).ready(function() {
-            $('#theme').attr('href', `assets/css/${sys.config.color}`);
-            sys.get_info().then(info => {
-                sys.config.session = info.session;
-                document.title = info.name;
-                sys.get_product().then(result => {
-                    $.each(result, (x, r) => {
-                        $('#products').append(`
+$(document).ready(function() {
+    $('#theme').attr('href', `assets/css/${sys.config.color}`);
+    sys.get_info().then(info => {
+        sys.config.session = info.session;
+        document.title = info.name;
+        sys.get_product().then(result => {
+            $.each(result, (x, r) => {
+                $('#products').append(`
                             <div class="col s6 margin-bottom padding-small">
                                 <div class="light-gray padding-small round">
                                     <button product_id="${r.product_id}" class="checkout button round small padding-small theme right"><i class="fa fa-shopping-cart"></i> Beli</button>
@@ -269,71 +280,71 @@
                                 </div>
                             </div>
                         `);
-                    });
-                    var checkout = document.getElementsByClassName('checkout');
-                    for(x = 0; x < checkout.length; x++){
-                        checkout[x].addEventListener('click', function() {
-                            var product_id = this.getAttribute('product_id');
-                            $('#product_id').val(product_id);
-                            $('#frmCheckout').show();
-                        });
-                    }
+            });
+            var checkout = document.getElementsByClassName('checkout');
+            for (x = 0; x < checkout.length; x++) {
+                checkout[x].addEventListener('click', function() {
+                    var product_id = this.getAttribute('product_id');
+                    $('#product_id').val(product_id);
+                    $('#frmCheckout').show();
                 });
+            }
+        });
 
-                sys.get_notice().then(notice => {
-                    $.each(notice, (x,r) => {
-                        $('#notice').append(`
+        sys.get_notice().then(notice => {
+            $.each(notice, (x, r) => {
+                $('#notice').append(`
                             <div class="leftbar border-pale-red padding text-gray margin-bottom small">
                                 <b class="text-orange">${r.title}</b><br>${r.content}</b>
                             </div>
                         `);
-                    });
-                });
+            });
+        });
 
-                sys.get_images().then(images => {
-                    if(images.length > 0){
-                        $.each(images, (x, r) => {
-                            $('#slides').append(`
+        sys.get_images().then(images => {
+            if (images.length > 0) {
+                $.each(images, (x, r) => {
+                    $('#slides').append(`
                                 <img class="mySlides" src="${sys.server}/assets/upload/${r.file}" style="width:100%">
                             `);
-                        });
-                        showDivs(slideIndex);
-                        setInterval(function(){
-                            plusDivs(+1);
-                        },3000);
-                    }
                 });
-            });
+                showDivs(slideIndex);
+                setInterval(function() {
+                    plusDivs(+1);
+                }, 3000);
+            }
+        });
+    });
 
-            $('#btnCheckout').on('click', function() {
-                $.LoadingOverlay("show", {
-                    image       : "",
-                    fontawesome : "fa fa-cog fa-spin",
-                    background : "rgba(0,0,0,0.5)"
-                });
-                $('#frmCheckout').hide();
+    $('#btnCheckout').on('click', function() {
+        $.LoadingOverlay("show", {
+            image: "",
+            fontawesome: "fa fa-cog fa-spin",
+            background: "rgba(0,0,0,0.5)"
+        });
+        $('#frmCheckout').hide();
 
-                if ($('#full_name').val() !== ''
-                    && $('#full_name').val().length < 32 
-                    && $('#phone').val() !== ''
-                    && $('#phone').val().length < 14 ){
-                        var name = $('#full_name').val();
-                        var first_name = name.split(' ')[0];
-                        var last_name = name.split(' ')[1];
-                        sys.checkout({
-                            "product_id": $('#product_id').val(),
-                            "first_name": first_name !== undefined ? first_name : '',
-                            "last_name": last_name !== undefined ? last_name : '',
-                            "phone": $('#phone').val(),
-                            "email": ""
-                        }).then(result => {
-                            $('#product_id').val('');
-                            $('#full_name').val('');
-                            $('#phone').val('');
-                            $('#email').val('');
-                            if (typeof result.qr_string !== null) {
-                                $('#qrcode').html('');
-                                $('#qrcode').html(`
+        if ($('#full_name').val() !== '' &&
+            $('#full_name').val().length < 32 &&
+            $('#phone').val() !== '' &&
+            $('#phone').val().length < 14) {
+            var name = $('#full_name').val();
+            var first_name = name.split(' ')[0];
+            var last_name = name.split(' ')[1];
+            sys.checkout({
+                "product_id": $('#product_id').val(),
+                "first_name": first_name !== undefined ? first_name : '',
+                "last_name": last_name !== undefined ? last_name : '',
+                "phone": $('#phone').val(),
+                "email": ""
+            }).then(result => {
+                $('#product_id').val('');
+                $('#full_name').val('');
+                $('#phone').val('');
+                $('#email').val('');
+                if (typeof result.qr_string !== null) {
+                    $('#qrcode').html('');
+                    $('#qrcode').html(`
                                     <qr-code id="qr"
                                         contents="${result.qr_string}"
                                         style="width: 200px;height: 200px;margin-left: auto;margin-right: auto;">
@@ -341,97 +352,97 @@
                                     </qr-code>
                                 `);
 
-                                $('#frmQrcode').show();
-                                $('#expiry_time').html(result.expiry_time);
-                                get_status(result.order_id);
-                                $.LoadingOverlay("hide");
-                            }else{
-                                $.LoadingOverlay("hide");
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Gagal membuat pesanan, Silahkan coba beberapa saat lagi.',
-                                    icon: 'error'
-                                });
-                            }
-                            console.log(result);
-                        });
-                    }else{
-                        $.LoadingOverlay("hide");
-                        Swal.fire({
-                            title: 'Warning!',
-                            text: 'Data yang anda masukan belum lengkap atau tidak valid! Harap masukan data yang sesuai.',
-                            icon: 'warning'
-                        });
-                    }
-                });
-
-            $('#btnMode').on('click', function(){
-                user.value = '';
-                pass.value = '';
-                switch($('#btnMode').attr('state')){
-                    case 'voucher':
-                        user.placeholder = 'Username';
-                        user.onkeyup = '';
-                        user.onchange = '';
-                        pass.type = 'password';
-                        $('#btnMode').attr('state', 'member');
-                    break;
-                    case 'member':
-                        user.placeholder = 'Kode Voucher';
-                        user.onkeyup = set_password;
-                        user.onchange = set_password;
-                        pass.type = 'hidden';
-                        $('#btnMode').attr('state', 'voucher');
-                    break;
+                    $('#frmQrcode').show();
+                    $('#expiry_time').html(result.expiry_time);
+                    get_status(result.order_id);
+                    $.LoadingOverlay("hide");
+                } else {
+                    $.LoadingOverlay("hide");
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Gagal membuat pesanan, Silahkan coba beberapa saat lagi.',
+                        icon: 'error'
+                    });
                 }
+                console.log(result);
             });
-            
-            $('#btnRegistration').on('click', function(){
-                window.location.href = 'registration.html';
+        } else {
+            $.LoadingOverlay("hide");
+            Swal.fire({
+                title: 'Warning!',
+                text: 'Data yang anda masukan belum lengkap atau tidak valid! Harap masukan data yang sesuai.',
+                icon: 'warning'
             });
-        });
-
-        function showTime() {
-            var a_p = "";
-            var today = new Date();
-            var curr_hour = today.getHours();
-            var curr_minute = today.getMinutes();
-            var curr_second = today.getSeconds();
-            if (curr_hour < 12) {
-                a_p = "AM";
-            } else {
-                a_p = "PM";
-            }
-            if (curr_hour == 0) {
-                curr_hour = 12;
-            }
-            if (curr_hour > 12) {
-                curr_hour = curr_hour - 12;
-            }
-            curr_hour = checkTime(curr_hour);
-            curr_minute = checkTime(curr_minute);
-            curr_second = checkTime(curr_second);
-            $("#time").html(curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p);
         }
+    });
 
-        function checkTime(i) {
-            if (i < 10) {
-                i = "0" + i;
-            }
-            return i;
+    $('#btnMode').on('click', function() {
+        user.value = '';
+        pass.value = '';
+        switch ($('#btnMode').attr('state')) {
+            case 'voucher':
+                user.placeholder = 'Username';
+                user.onkeyup = '';
+                user.onchange = '';
+                pass.type = 'password';
+                $('#btnMode').attr('state', 'member');
+                break;
+            case 'member':
+                user.placeholder = 'Kode Voucher';
+                user.onkeyup = set_password;
+                user.onchange = set_password;
+                pass.type = 'hidden';
+                $('#btnMode').attr('state', 'voucher');
+                break;
         }
-        setInterval(showTime, 500);
+    });
 
-        var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
-        var date = new Date();
-        var day = date.getDate();
-        var month = date.getMonth();
-        var thisDay = date.getDay(),
-        thisDay = myDays[thisDay];
-        var yy = date.getYear();
-        var year = (yy < 1000) ? yy + 1900 : yy;
-        $("#date").html(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
+    $('#btnRegistration').on('click', function() {
+        window.location.href = 'registration.html';
+    });
+});
+
+function showTime() {
+    var a_p = "";
+    var today = new Date();
+    var curr_hour = today.getHours();
+    var curr_minute = today.getMinutes();
+    var curr_second = today.getSeconds();
+    if (curr_hour < 12) {
+        a_p = "AM";
+    } else {
+        a_p = "PM";
+    }
+    if (curr_hour == 0) {
+        curr_hour = 12;
+    }
+    if (curr_hour > 12) {
+        curr_hour = curr_hour - 12;
+    }
+    curr_hour = checkTime(curr_hour);
+    curr_minute = checkTime(curr_minute);
+    curr_second = checkTime(curr_second);
+    $("#time").html(curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p);
+}
+
+function checkTime(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+setInterval(showTime, 500);
+
+var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+var date = new Date();
+var day = date.getDate();
+var month = date.getMonth();
+var thisDay = date.getDay(),
+    thisDay = myDays[thisDay];
+var yy = date.getYear();
+var year = (yy < 1000) ? yy + 1900 : yy;
+$("#date").html(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
 </script>
 <div class="hide">
     $(if error)
