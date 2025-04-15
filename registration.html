@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hotspot</title>
+
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+        <link id="color" rel="stylesheet" type="text/css" href="assets/css/theme-green.css">
+
+        <style type="text/css">
+            html{background: #222;}
+            body{margin: auto; max-width: 480px; font-family: sans-serif;}
+            .main{min-height: 100vh; background: #FFF;}
+            a{text-decoration: none;}
+            input,select,textarea{outline: none;}
+            #qr_code *{margin: auto; text-align: center!important;}
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+        <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
+        <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
+
+        <script type="text/javascript" src="config.js"></script>
+
+        <div class="main border border-black card-4">
+            <div class="bar border-bottom">
+                <a class="bar-item" href="login.html"><img src="assets/icons/back.png" width="16"> <span id="date"> Kembali</span></a>
+            </div>
+
+            <div class="container margin-top" id="frm_register">
+                <p class="margin-bottom">
+                    <b class="text-theme">Pendaftaran Pemasangan WiFi</b><br>
+                    <i class="text-gray">Silahkan lengkapi formulir pendaftaran berikut, Setelah itu kami akan menghubungi anda paling lambat 1x24 jam.</i>
+                </p>
+
+                <span class="text-theme">NIK</span>
+                <input type="number" id="id_card" class="input border round margin-bottom theme-l5">
+
+                <span class="text-theme">Nama Depan</span>
+                <input type="text" id="first_name" class="input border round margin-bottom theme-l5">
+
+                <span class="text-theme">Nama Belakang</span>
+                <input type="text" id="last_name" class="input border round margin-bottom theme-l5">
+
+                <span class="text-theme">Nomor Telepon</span>
+                <input type="number" id="phone" class="input border round margin-bottom theme-l5">
+
+                <span class="text-theme">Alamat Pemasangan</span>
+                <textarea id="address" class="input border round margin-bottom theme-l5"></textarea>
+                
+                <button id="btnSubmit" class="button round theme block">Daftar</button>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function isNumeric(str) { return /^\d+$/.test(str); }
+            $(document).ready(function(){
+                $('#btnSubmit').on('click', function(){
+                    var id_card = $('#id_card').val();
+                    var first_name = $('#first_name').val();
+                    var last_name = $('#last_name').val();
+                    var phone = $('#phone').val();
+                    var address = $('#address').val();
+                    if(
+                        id_card.length == 16 
+                        && isNumeric(id_card) == true 
+                        && first_name.length > 3 
+                        && first_name.length < 13 
+                        && last_name.length > 3 
+                        && last_name.length < 13 
+                        && isNumeric(phone) == true 
+                        && phone.length > 10 
+                        && phone.length < 14 
+                        && address.length > 16){
+                        var params = {}
+                        params.user_id = config.user_id;
+                        params.router_id = config.router_id;
+                        params.id_card = id_card;
+                        params.first_name = first_name;
+                        params.last_name = last_name;
+                        params.phone = phone;
+                        params.address = address;
+                        $.ajax({
+                            url: config.server + '/api/registration',
+                            type: 'POST',
+                            data: JSON.stringify(params),
+                            success: function(result){
+                                if(result.status == 'error'){
+                                    alert(result.message);
+                                }else{
+                                    alert('Terima Kasih!\r\nPendftaran anda telah kami terima, Kami akan segera menghubungi anda dalam waktu paling lambat 1x24 jam.');
+                                    window.location.href = "login.html";
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                        });
+                    }else{
+                        alert('Harap lengkapi formulir pendaftaran dengan data yang sesuai.');
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

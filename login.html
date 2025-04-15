@@ -1,63 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-    <link id="theme" rel="stylesheet" type="text/css" href="">
-    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
-    <style type="text/css">
-        html{
-            background: #222;
-            color: #FFF;
-        }
-        body {
-            margin: auto;
-            max-width: 480px;
-            min-height: 100vh;
-            font-family: arial;
-            font-size: 14px;
-            color: gray;
-        }
-        .main{
-            min-height: 100vh;
-        }
-        .head {
-            min-height: 150px;
-        }
-
-        .curve {
-            width: 95%;
-            max-width: 440;
-            padding: 10px;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-        .nav{
-            min-height: 35px;
-            min-width: 35px;
-        }
-        input,select,texarea {
-            outline: none;
-        }
-        .mySlides {display:none}
-        .left, .right, .badge {cursor:pointer}
-        .badge {height:13px;width:13px;padding:0}
-    </style>
-    <title>Login Hotspot</title>
-</head>
-<body class="light-gray">
-    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="assets/js/sweetalert.js"></script>
-    <script type="text/javascript" src="assets/js/loadingoverlay.min.js"></script>
-    <script type="text/javascript" src="assets/qr-code/qr-code.js"></script>
-    <script type="text/javascript" src="config.js"></script>
-    <script type="text/javascript" src="assets/js/system.js"></script>
-    <script type="text/javascript">
-        var sys = new System();
-    </script>
-
-    <div class="hide">
+	<head>
+		<title>Hotspot</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+		<link id="color" rel="stylesheet" type="text/css" href="assets/css/theme-green.css">
+		<style type="text/css">
+			html{background: #222;}
+			body{margin: auto; max-width: 480px; font-family: sans-serif;}
+			.main{min-height: 100vh; background: #FFF;}
+			a{text-decoration: none;}
+			input,select,textarea{outline: none;}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript" src="assets/js/jquery.min.js"></script>
+		<script type="text/javascript" src="config.js"></script>
+		<div class="hide">
         $(if chap-id)
         <form name="sendin" action="$(link-login-only)" method="post">
             <input type="hidden" name="username" />
@@ -68,392 +27,277 @@
 
         <script type="text/javascript" src="assets/js/md5.js"></script>
         <script type="text/javascript">
+        	config.session = 'off';
             function doLogin() {
-                switch(sys.config.session){
-                case 'off':
-                    document.sendin.username.value = document.login.username.value;
-                    document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
-                    document.sendin.submit();
-                    break;
-                case 'on':
-                    $.LoadingOverlay("show", {
-                        image       : "",
-                        fontawesome : "fa fa-cog fa-spin",
-                        background : "rgba(0,0,0,0.5)"
-                    });
-                    sys.clear_session(document.login.username.value).then(result => {
-                        $.LoadingOverlay("hide");
-                        document.sendin.username.value = document.login.username.value;
-                        document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
-                        document.sendin.submit();
-                        console.log(result);
-                    });
-                    return false;
-                    break;
-                }
-                return false;
-            }
-        </script>
-        $(endif)
-    </div>
+                switch(config.session){
+	                case 'off':
+	                    document.sendin.username.value = document.login.username.value;
+	                    document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+	                    document.sendin.submit();
+	                    break;
+	                case 'on':
+	                	params.user_id = config.user_id;
+	                	params.router_id = config.router_id;
+	                	params.username = document.login.username.value;
+	                    $.ajax({
+	                    	url: config.server + '/api/session',
+	                    	type: 'post',
+	                    	data: JSON.stringify(params),
+	                    	success: function(result){
+	                    		document.sendin.username.value = document.login.username.value;
+		                        document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+		                        document.sendin.submit();
+		                        console.log(result);
+	                    	},
+	                    	error: function(err){ console.log(err); }
+	                    });
+	                    return false;
+	                    break;
+	                }
+	                return false;
+	            }
+	        </script>
+	        $(endif)
+	    </div>
 
-    <div class="main white">
-        <div class="head display-container theme">
-            <div class="padding">
-                <span id="date">-</span>
-                <span class="right" id="time"></span>
-            </div>
-            <div class="display-bottommiddle padding white curve">
-                <i class="fa fa-wifi fa-2x text-theme right"></i>
-                <b id="hotspot_name" class="text-theme">Selamat Datang</b><br>
-                <i class="text-gray small">Silahkan masukan kode voucher anda</i>
-            </div>
-        </div>
-        <div class="padding">
-            <form name="login" action="$(link-login-only)" method="post" $(if chap-id) onSubmit="return doLogin()" $(endif)>
-                <input type="hidden" name="dst" value="$(link-orig)">
-                <input type="hidden" name="popup" value="true">
-                <input type="text" id="username" name="username" class="input border round light-gray margin-bottom text-theme" style="font-weight: 600;" placeholder="Kode Voucher" required>
-                <input type="hidden" id="password" name="password" class="input border round light-gray margin-bottom" placeholder="Password" required>
-                <button id="btnLogin" class="button block theme round margin-bottom">Masuk</button>
-            </form>
+		<div class="main border border-black card-4">
+			<div class="bar">
+				<a class="bar-item" href="login.html"><img src="assets/icons/date.png" width="16"> <span id="date">2025-03-10</span></a>
+				<a class="bar-item right"><img src="assets/icons/time.png" width="16"> <span id="time">10:30:01 PM</span></a>
+			</div>
+			<div class="container margin-top">
+				<div class="padding round topbar border-theme">
+					<div class="row margin-top margin-bottom">
+						<div class="col s3 center">
+							<a href="#" id="btn_mode" state="voucher">
+								<img src="assets/icons/mode.png" width="24"><br>
+								<span class="small">Mode</span>
+							</a>
+						</div>
+						<div class="col s3 center">
+							<a href="#" id="btn_register">
+								<img src="assets/icons/register.png" width="24"><br>
+								<span class="small">Pendaftaran</span>
+							</a>
+						</div>
+						<div class="col s3 center">
+							<a href="#" id="btn_help">
+								<img src="assets/icons/help.png" width="24"><br>
+								<span class="small">Bantuan</span>
+							</a>
+						</div>
+						<div class="col s3 center">
+							<a href="#" id="btn_contact">
+								<img src="assets/icons/contact.png" width="24"><br>
+								<span class="small">Kontak</span>
+							</a>
+						</div>
+					</div>
+				</div>
 
-            <div class="row margin-top margin-bottom">
-                <div class="col s3 center">
-                    <button id="btnMode" state="voucher" class="nav button small padding-small round theme-l5 border border-theme">
-                        <i class="fa fa-user fa-lg text-theme"></i>
-                    </button>
-                    <br><span class="text-gray small">Mode</span>
-                </div>
-                <div class="col s3 center">
-                    <button id="btnRegistration" class="nav button small padding-small round theme-l5 border border-theme">
-                        <i class="fa fa-edit fa-lg text-theme"></i>
-                    </button>
-                    <br><span class="text-gray small">Pendaftaran</span>
-                </div>
+				<div id="slideshow" class="content display-container margin-bottom" style="width: 100%;"></div>
 
-                <div class="col s3 center">
-                    <button class="nav button small padding-small round theme-l5 border border-theme">
-                        <i class="fa fa-life-buoy fa-lg text-theme"></i>
-                    </button>
-                    <br><span class="text-gray small">Bantuan</span>
-                </div>
-                <div class="col s3 center">
-                    <button class="nav button small padding-small round theme-l5 border border-theme">
-                        <i class="fa fa-whatsapp fa-lg text-theme"></i>
-                    </button>
-                    <br><span class="text-gray small">Kontak</span>
-                </div>
-            </div>
-            <div id="slides" class="content display-container" style="width: 100%;">
+				<form name="login" action="$(link-login-only)" method="post" $(if chap-id) onSubmit="return doLogin()" $(endif)>
+	                <input type="hidden" name="dst" value="$(link-orig)">
+	                <input type="hidden" name="popup" value="true">
 
-            </div>
-            <div class="leftbar border-pale-red padding text-gray margin-bottom small">
-                <b class="text-orange">Belum Punya Voucher?</b><br>Berikut adalah daftar harga voucher kami, Silahkan klik tombol "Beli" dan lengkapi identitasnya ya..
-            </div>
+	                <input type="text" id="username" name="username" placeholder="Kode Voucher" class="input border theme-l4 round margin-bottom" autocomplete="off" required>
+	                <input type="hidden" id="password" name="password" placeholder="Password" class="input border theme-l4 round margin-bottom" autocomplete="off" required>
+	                <button id="btnLogin" class="button block theme round margin-bottom">Masuk</button>
+	            </form>
 
-            <div id="products" class="row"></div>
-            <div id="notice"></div>
-        </div>
-    </div>
+				<div id="notice" class="padding-small margin-bottom"></div>
+				<div id="product" class="row margin-bottom"></div>
+			</div>
+		</div>
 
-    <div class="display-middle white border round card-4 padding" id="frmCheckout" style="display:none;min-width:320px;max-width:320px">
-        <button class="button small padding-small red round right" onclick="$('#frmCheckout').hide()"><i class="fa fa-times"></i></button>
-        <p align="center">
-            <b class="text-theme">Beli Voucher</b>
-        </p>
-        <p align="center">
-            Silahkan lengkapi indentitas anda
-        </p>
-        <input type="hidden" id="product_id">
-        <span class="text-theme">Nama Lengkap</span>
-        <input type="text" id="full_name" class="input border round margin-bottom">
+		<div id="product_template" class="hide">
+			<div class="col s6 padding-small">
+				<div class="topbar round border border-theme padding-small">
+					<a href="checkout.html?product_id={product_id}" class="right buttom small theme padding-small round">Beli</a>
+					<b>{name}</b><br>
+					<i>{price}</i>
+				</div>
+			</div>
+		</div>
 
-        <span class="text-theme">Nomor WhatsApp</span>
-        <input type="number" id="phone" class="input border round margin-bottom">
-        <p align="center" class="light-gray small padding">
-            Kami akan mengirimkan kode voucher melalui WhatsApp, Pastikan data yang anda masukan sudah sesuai.
-        </p>
-        <button id="btnCheckout" class="button block theme round margin-bottom">Checkout</button>
-    </div>
+		<div id="notice_template" class="hide">
+			<div class="leftbar border-theme padding-small">
+				<b>{title}</b><br>
+				<div>{content}</div>
+			</div>
+		</div>
 
-    <div class="display-middle white border round card-4 padding" id="frmQrcode" style="display:none;min-width:320px;max-width:320px">
-        <button class="button small padding-small red round right" onclick="$('#frmQrcode').hide()"><i class="fa fa-times"></i></button>
-        <p align="center">
-            <b class="text-theme">Pembayaran</b>
-        </p>
-        <p align="center">
-            Silahkan lakukan pembayaran melalui QRIS menggunakan aplikasi pembayaran anda.
-        </p>
-        <div style="display: flex; justify-content: center; text-align: center;" id="qrcode"></div>
-        <p align="center" class="padding small light-gray">
-            Lakukan pembayaran sebelum<br><b id="expiry_time" class="text-orange"></b>
-        </p>
+		<div id="slide_template" class="hide">
+			<img class="{class} border round" {attribute} style="width:100%">
+		</div>
 
-        <p align="center" class="small">
-            Pembayaran anda akan terkonfirmasi otomatis oleh system kami, Kode voucher akan terkirim otomatis melalui WhatsApp.
-        </p>
-        <p align="center">
-            <img src="assets/images/qris.png" class="image" style="width:50%">
-        </p>
-    </div>
+		<script type="text/javascript">
+			config.session = 'off';
 
-    
-<script type="text/javascript">
-var slideIndex = 1;
+			var params = {}
+			params.user_id = config.user_id;
+			params.router_id = config.router_id;
 
-function plusDivs(n) {
-    showDivs(slideIndex += n);
-}
 
-function currentDiv(n) {
-    showDivs(slideIndex = n);
-}
+			var slideIndex = 1;
+			function plusDivs(n){showDivs(slideIndex += n);}
+			function currentDiv(n){showDivs(slideIndex = n);}
+			function showDivs(n){
+			    var i;
+			    var x = document.getElementsByClassName("mySlides");
+			    if (n > x.length) {slideIndex = 1;}
+			    if (n < 1) {slideIndex = x.length;}
+			    for (i = 0; i < x.length; i++) {x[i].style.display = "none";}
+			    x[slideIndex - 1].style.display = "block";
+			}
+			var user = document.getElementById('username');
+			var pass = document.getElementById('password');
+			function setpsw(){
+				user.value = user.value;
+				pass.value = user.value;
+			}
+			user.onkeyup = setpsw;
+			user.onchange = setpsw;
 
-function showDivs(n) {
-    var i;
-    var x = document.getElementsByClassName("mySlides");
-    if (n > x.length) {
-        slideIndex = 1;
-    }
-    if (n < 1) {
-        slideIndex = x.length;
-    }
-    for (i = 0; i < x.length; i++) {
-        x[i].style.display = "none";
-    }
-    x[slideIndex - 1].style.display = "block";
-}
+			$(document).ready(function(){
+				// get info
+				$.ajax({
+					url: config.server + '/api/info',
+					type: 'post',
+					data: JSON.stringify(params),
+					success: function(result){
+						console.log(result);
+						config.session = result.session;
+						$('#color').attr('href', 'assets/css/' + result.color);
+					},
+					error: function(err){ console.log(err); }
+				});
 
-function get_status(order_id) {
-    sys.get_status(order_id).then((check) => {
-        console.log(check);
-        if (check.status == 'pending') {
-            setTimeout(function() {
-                get_status(order_id);
-            }, 1000);
-        } else {
-            if (check.status == 'settlement') {
-                Swal.fire({
-                    title: "Transaksi Berhasil",
-                    text: "Kami telah mengirimkan kode voucher melalui WhatsApp. Apakah anda ingin menggunakannya sekarang?",
-                    icon: "success",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Ya, Sambungkan"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = `$(link-login-only)?username=${check.voucher}&password=${check.voucher}`;
-                    } else {
-                        window.location.reload();
-                    }
-                });
-            }
-        }
-    });
-}
+				// get product
+				$.ajax({
+					url: config.server + '/api/product',
+					type: 'post',
+					data: JSON.stringify(params),
+					success: function(result){
+						console.log(result);
+						$.each(result, function(index, row){
+							var x = $('#product_template').html();
+							var y = x.replace('{name}', row.name);
+							var z = y.replace('{price}', row.price);
+							var a =  z.replace('{product_id}', row.product_id);
+							$('#product').append(a);
+						});
+					},
+					error: function(err){ console.log(err); }
+				});
 
-var user = document.getElementById('username');
-var pass = document.getElementById('password');
+				// get images
+				$.ajax({
+					url: config.server + '/api/slideshow',
+					type: 'post',
+					data: JSON.stringify(params),
+					success: function(result){
+						console.log(result);
+						$.each(result, function(index, row){
+							var x = $('#slide_template').html();
+							var y = x.replace('{attribute}', 'src="' + config.server + '/assets/upload/' + row.file + '"');
+							var z = y.replace('{class}', 'mySlides');
+							$('#slideshow').append(z);
+						});
+						showDivs(slideIndex);
+		                setInterval(function() {
+		                    plusDivs(+1);
+		                }, 3000);
+					},
+					error: function(err){ console.log(err); }
+				});
 
-function set_password() {
-    user.value = user.value;
-    pass.value = user.value;
-}
-user.onkeyup = set_password;
-user.onchange = set_password;
+				// get notice
+				$.ajax({
+					url: config.server + '/api/notice',
+					type: 'post',
+					data: JSON.stringify(params),
+					success: function(result){
+						console.log(result);
+						$.each(result, function(index, row){
+							var x = $('#notice_template').html();
+							var y = x.replace('{title}', row.title);
+							var z = y.replace('{content}', row.content);
+							$('#notice').append(z);
+						})
+					},
+					error: function(err){ console.log(err); }
+				});
 
-$(document).ready(function() {
-    $('#theme').attr('href', `assets/css/${sys.config.color}`);
-    sys.get_info().then(info => {
-        sys.config.session = info.session;
-        document.title = info.name;
-        sys.get_product().then(result => {
-            $.each(result, (x, r) => {
-                $('#products').append(`
-                            <div class="col s6 margin-bottom padding-small">
-                                <div class="light-gray padding-small round">
-                                    <button product_id="${r.product_id}" class="checkout button round small padding-small theme right"><i class="fa fa-shopping-cart"></i> Beli</button>
-                                    <b class="text-theme">${r.name}</b><br>
-                                    <span class="text-gray">${r.price}</span>
-                                </div>
-                            </div>
-                        `);
-            });
-            var checkout = document.getElementsByClassName('checkout');
-            for (x = 0; x < checkout.length; x++) {
-                checkout[x].addEventListener('click', function() {
-                    var product_id = this.getAttribute('product_id');
-                    $('#product_id').val(product_id);
-                    $('#frmCheckout').show();
-                });
-            }
-        });
+				// buttom mode
+				$('#btn_mode').on('click', function(){
+					var state = this.getAttribute('state');
+					switch(state){
+						case 'voucher': 
+							user.placeholder = 'Username';
+							user.onkeyup = '';
+							user.onchange = '';
+							pass.type = 'password';
+							this.setAttribute('state', 'member');
+						break;
+						case 'member':
+							user.placeholder = 'Kode Voucher';
+							user.onkeyup = setpsw;
+							user.onchange = setpsw;
+							pass.type = 'hidden';
+							this.setAttribute('state', 'voucher');
+						break;
+					}
+				});
 
-        sys.get_notice().then(notice => {
-            $.each(notice, (x, r) => {
-                $('#notice').append(`
-                            <div class="leftbar border-pale-red padding text-gray margin-bottom small">
-                                <b class="text-orange">${r.title}</b><br>${r.content}</b>
-                            </div>
-                        `);
-            });
-        });
+				$('#btn_register').on('click', function(){window.location.href = 'registration.html';});
+				$('#btn_help').on('click', function(){window.location.href = 'help.html';});
+				$('#btn_contact').on('click', function(){window.location.href = 'contact.html';});
+			});
 
-        sys.get_images().then(images => {
-            if (images.length > 0) {
-                $.each(images, (x, r) => {
-                    $('#slides').append(`
-                                <img class="mySlides" src="${sys.server}/assets/upload/${r.file}" style="width:100%">
-                            `);
-                });
-                showDivs(slideIndex);
-                setInterval(function() {
-                    plusDivs(+1);
-                }, 3000);
-            }
-        });
-    });
 
-    $('#btnCheckout').on('click', function() {
-        $.LoadingOverlay("show", {
-            image: "",
-            fontawesome: "fa fa-cog fa-spin",
-            background: "rgba(0,0,0,0.5)"
-        });
-        $('#frmCheckout').hide();
+			function showTime() {
+			    var a_p = "";
+			    var today = new Date();
+			    var curr_hour = today.getHours();
+			    var curr_minute = today.getMinutes();
+			    var curr_second = today.getSeconds();
+			    if (curr_hour < 12) {
+			        a_p = "AM";
+			    } else {
+			        a_p = "PM";
+			    }
+			    if (curr_hour == 0) {
+			        curr_hour = 12;
+			    }
+			    if (curr_hour > 12) {
+			        curr_hour = curr_hour - 12;
+			    }
+			    curr_hour = checkTime(curr_hour);
+			    curr_minute = checkTime(curr_minute);
+			    curr_second = checkTime(curr_second);
+			    $("#time").html(curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p);
+			}
 
-        if ($('#full_name').val() !== '' &&
-            $('#full_name').val().length < 32 &&
-            $('#phone').val() !== '' &&
-            $('#phone').val().length < 14) {
-            var name = $('#full_name').val();
-            var first_name = name.split(' ')[0];
-            var last_name = name.split(' ')[1];
-            sys.checkout({
-                "product_id": $('#product_id').val(),
-                "first_name": first_name !== undefined ? first_name : '',
-                "last_name": last_name !== undefined ? last_name : '',
-                "phone": $('#phone').val(),
-                "email": ""
-            }).then(result => {
-                $('#product_id').val('');
-                $('#full_name').val('');
-                $('#phone').val('');
-                $('#email').val('');
-                if (typeof result.qr_string !== null) {
-                    $('#qrcode').html('');
-                    $('#qrcode').html(`
-                                    <qr-code id="qr"
-                                        contents="${result.qr_string}"
-                                        style="width: 200px;height: 200px;margin-left: auto;margin-right: auto;">
-                                        <img src="assets/images/logo.png" width="37" height="37" slot="icon" />
-                                    </qr-code>
-                                `);
+			function checkTime(i) {
+			    if (i < 10) {
+			        i = "0" + i;
+			    }
+			    return i;
+			}
+			setInterval(showTime, 500);
 
-                    $('#frmQrcode').show();
-                    $('#expiry_time').html(result.expiry_time);
-                    get_status(result.order_id);
-                    $.LoadingOverlay("hide");
-                } else {
-                    $.LoadingOverlay("hide");
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Gagal membuat pesanan, Silahkan coba beberapa saat lagi.',
-                        icon: 'error'
-                    });
-                }
-                console.log(result);
-            });
-        } else {
-            $.LoadingOverlay("hide");
-            Swal.fire({
-                title: 'Warning!',
-                text: 'Data yang anda masukan belum lengkap atau tidak valid! Harap masukan data yang sesuai.',
-                icon: 'warning'
-            });
-        }
-    });
-
-    $('#btnMode').on('click', function() {
-        user.value = '';
-        pass.value = '';
-        switch ($('#btnMode').attr('state')) {
-            case 'voucher':
-                user.placeholder = 'Username';
-                user.onkeyup = '';
-                user.onchange = '';
-                pass.type = 'password';
-                $('#btnMode').attr('state', 'member');
-                break;
-            case 'member':
-                user.placeholder = 'Kode Voucher';
-                user.onkeyup = set_password;
-                user.onchange = set_password;
-                pass.type = 'hidden';
-                $('#btnMode').attr('state', 'voucher');
-                break;
-        }
-    });
-
-    $('#btnRegistration').on('click', function() {
-        window.location.href = 'registration.html';
-    });
-});
-
-function showTime() {
-    var a_p = "";
-    var today = new Date();
-    var curr_hour = today.getHours();
-    var curr_minute = today.getMinutes();
-    var curr_second = today.getSeconds();
-    if (curr_hour < 12) {
-        a_p = "AM";
-    } else {
-        a_p = "PM";
-    }
-    if (curr_hour == 0) {
-        curr_hour = 12;
-    }
-    if (curr_hour > 12) {
-        curr_hour = curr_hour - 12;
-    }
-    curr_hour = checkTime(curr_hour);
-    curr_minute = checkTime(curr_minute);
-    curr_second = checkTime(curr_second);
-    $("#time").html(curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p);
-}
-
-function checkTime(i) {
-    if (i < 10) {
-        i = "0" + i;
-    }
-    return i;
-}
-setInterval(showTime, 500);
-
-var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
-var date = new Date();
-var day = date.getDate();
-var month = date.getMonth();
-var thisDay = date.getDay(),
-    thisDay = myDays[thisDay];
-var yy = date.getYear();
-var year = (yy < 1000) ? yy + 1900 : yy;
-$("#date").html(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
-</script>
-<div class="hide">
-    $(if error)
-    <script type="text/javascript">
-        Swal.fire({
-            title: "Error!",
-            text: "$(error)",
-            icon: "error"
-        });
-    </script>
-    $(endif)
-</div>
-</body>
+			var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+			var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+			var date = new Date();
+			var day = date.getDate();
+			var month = date.getMonth();
+			var thisDay = date.getDay(),
+			    thisDay = myDays[thisDay];
+			var yy = date.getYear();
+			var year = (yy < 1000) ? yy + 1900 : yy;
+			$("#date").html(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
+		</script>
+	</body>
 </html>

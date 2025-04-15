@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hotspot</title>
+
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+        <link id="color" rel="stylesheet" type="text/css" href="assets/css/theme-green.css">
+
+        <style type="text/css">
+            html{background: #222;}
+            body{margin: auto; max-width: 480px; font-family: sans-serif;}
+            .main{min-height: 100vh; background: #FFF;}
+            a{text-decoration: none;}
+            input,select,textarea{outline: none;}
+            #qr_code *{margin: auto; text-align: center!important;}
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+        <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
+        <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
+
+        <script type="text/javascript" src="config.js"></script>
+
+        <div class="main border border-black card-4">
+            <div class="bar border-bottom">
+                <a class="bar-item" href="login.html"><img src="assets/icons/back.png" width="16"> <span id="date"> Kembali</span></a>
+            </div>
+
+            <div class="container margin-top padding-small" id="help"></div>
+
+            <div id="template" class="hide">
+                <div class="margin-bottom leftbar border-theme padding-small">
+                    <b class="text-theme">{ask}</b><br>
+                    <span class="text-gray">{answer}</span>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                var params = {}
+                params.user_id = config.user_id;
+                params.router_id = config.router_id;
+                $.ajax({
+                    url: config.server + '/api/help',
+                    type: 'POST',
+                    data: JSON.stringify(params),
+                    success: function(result){
+                        $.each(result, function(index, row){
+                            var template = $('#template').html();
+                            var x = template.replace('{ask}', row.ask);
+                            var y = x.replace('{answer}', row.answer);
+                            $('#help').append(y);
+                        });
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
