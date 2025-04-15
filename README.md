@@ -6,13 +6,10 @@ Anda harus menggunakan user_id dan router_id anda sendiri.
 Untuk mendapakan user_id dan router_id silahkan kunjungi website https://niceportal.net
 
 ```js
-class Config{
-    constructor(){
-        this.user_id = 'USER ID ANDA';
-        this.router_id = 'ROUTER ID ANDA';
-        
-        this.color = 'theme-green.css';
-    }
+var config = {
+	user_id: 'USER ID ANDA',
+	router_id: 'ROUTER ID ANDA',
+	server: 'https://niceportal.net'
 }
 ```
 
@@ -27,141 +24,6 @@ add action=accept disabled=no dst-host="niceportal.net" comment="NicePortal";
 add dst-address=103.153.169.11 action=accept comment="SeaBank";
 add dst-address=103.153.168.5 action=accept comment="SeaBank";
 add dst-address=103.153.168.5 action=accept comment="SeaBank";
-add dst-host="m.dana.id" action=accept comment="Dana";
-add dst-host="dana.id" action=accept comment="Dana";
-```
-
-# DOKUMENTASI API
-Anda juga dapat mengintegrasikan website atau template anda sendiri dengan NicePortal melalui API.
-Berikut adalah beberapa contoh sederhana untuk membuat Request API ke NicePortal.
-
-## Mengambil Informasi Router
-```html
-<script type="text/javascript" src="assets/js/jquery.min.js"></script>
-<script type="text/javascript" src="assets/js/config.js"></script>
-<script type="text/javascript" src="assets/js/system.js"></script>
-<script type="text/javascript">
-    const app = new System();
-    $(document).ready((e) => {
-        app.get_info().then(result => {
-            console.log(result);
-        });
-    });
-</script>
-```
-Contoh Response
-```json
-{
-    "user_id": "72SGPJZV22H07UJQ",
-    "name": "Server Name",
-    "session": "on",
-    "expire": "2029-03-30",
-    "disable": "false"
-}
-```
-
-### Mengambil Data Produk / Voucher
-```js
-    const app = new System();
-    $(document).ready((e) => {
-        app.get_product().then(result => {
-            console.log(result);
-        });
-    });
-```
-Contoh Response
-```json
-[
-    {
-        "user_id": "72SGPJZV22H07UJQ",
-        "router_id": "Q2J24W13IY8JKOPR",
-        "name": "7 Hari",
-        "profile": "7 Hari",
-        "price": "20,000",
-        "limit_uptime": "0",
-        "limit_bytes": "0",
-        "description": "- Unlimited Kuota",
-        "product_id": "5E4D66WNMU4YIY50"
-    },
-    {
-        "user_id": "72SGPJZV22H07UJQ",
-        "router_id": "Q2J24W13IY8JKOPR",
-        "name": "30 Hari",
-        "profile": "30 Hari",
-        "price": "50,000",
-        "limit_uptime": "0",
-        "limit_bytes": "0",
-        "description": "- Unlimited Kuota",
-        "product_id": "F0S45D47V8HEU2GH"
-    }
-]
-```
-
-### Permintaan Transaksi
-```js
-const app = new System();
-$(document).ready((e) => {
-    app.checkout({
-        "product_id": "ID PRODUK",
-        "first_name": "Nama Depan",
-        "last_name": "Nama Belakang",
-        "phone": "08XXXXXXXXXX",
-        "email": "examplemail.com"
-    }).then(result => {
-        console.log(result);
-    });
-});
-```
-Contoh Response 
-```json
-{
-    "user_id": "72SGPJZV22H07UJQ",
-    "router_id": "Q2J24W13IY8JKOPR",
-    "product_id": "F0S45D47V8HEU2GH",
-    "year": "2025",
-    "month": "04",
-    "days": "04",
-    "time": "11:01:23 AM",
-    "profile": "30 Hari",
-    "product_name": "30 Hari",
-    "gross_amount": "50000",
-    "service_cost": 500,
-    "first_name": "Septiana",
-    "last_name": "Harun",
-    "phone": "085117018997",
-    "email": "",
-    "transaction_status": "pending",
-    "transaction_id": "73ea2cf8-4134-4ce4-89af-e0389551b9d8",
-    "qr_string": "00020101021226610014COM.GO-JEK.WWW01189360091434519636870210G4519636870303UKE51440014ID.CO.QRIS.WWW0215ID10222328083970303UKE5204573453033605405500005802ID5911NICE PORTAL6008SUKABUMI61054335962395028A220250404040123riHNDhBvaAID0703A01630489D5",
-    "acquirer": "gopay",
-    "expiry_time": "2025-04-04 11:16:23",
-    "order_id": "ZW2XI2S5UCXCNYQ1"
-}
-```
-Anda dapat harus membuat response (qr_string) menjadi sebuah QR Code agar dapat dipindai menggunakan aplikasi pembayaran yang mendukung QRIS. Lihat cara merubah string menjadi QR Code menggunakan JavaScript. https://davidshimjs.github.io/qrcodejs/
-
-### Cek Status Transaksi
-```js
-const app = new System();
-$(document).ready((e) => {
-    app.get_status(ORDER_ID_XXXXX).then(result => {
-        console.log(result);
-    });
-});
-```
-Contoh Response PENDING
-```json
-{
-    "status" : "pending",
-    "voucher" : ""
-}
-```
-Contoh Response SUCCESS
-```json
-{
-    "status" : "settlement",
-    "voucher" : "ABC1234"
-}
 ```
 
 ### PILIHAN WARNA
