@@ -131,7 +131,7 @@
 						console.log(result);
 						$('#product_id').html(product_id);
 						$('#name').html(result.name);
-						$('#description').html(result.description.replace("\r\n", "<br>"));
+						$('#description').html(result.description);
 						$('#price').html(number_format(result.price));
 						$('#frm_order').removeClass('hide');
 					},
