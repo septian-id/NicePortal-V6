@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Hotspot</title>
+		<title>Checkout</title>
 
 		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -24,7 +24,10 @@
 	</head>
 	<body>
 		<script type="text/javascript" src="http://niceportal.net/assets/js/jquery.min.js"></script>
-		<script type="text/javascript" src="assets/js/qrcode.min.js"></script>
+		<script type="text/javascript" src="assets/js/loadingoverlay.min.js"></script>
+		<script type="text/javascript" src="assets/toastr/toastr.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="assets/toastr/toastr.min.css">
+
 		<script type="text/javascript" src="assets/js/qrcode.min.js"></script>
 
 		<script type="text/javascript" src="config.js"></script>
@@ -142,6 +145,7 @@
 				});
 
 				$('#btn_checkout').on('click', function(){
+					$.LoadingOverlay("show");
 					var full_name = $('#full_name').val();
 					var phone = $('#phone').val();
 
@@ -171,16 +175,19 @@
 									$('#frm_order').addClass('hide');
 									$('#frm_payment').removeClass('hide');
 									new QRCode(document.getElementById("qr_code"), result.qr_string);
+									$.LoadingOverlay("hide");
 									check_status(result.order_id);
 								}
 							},
 							error: function(err){
 								console.log(err);
-								window.location.href = 'login.html';
+								$.LoadingOverlay("hide");
+								toastr["error"]("Gagal membuat pesanan, Silahkan coba lagi nanti", "error");
 							}
 						});
 					}else{
-						alert('Harap masukan data yang sesuai!');
+						$.LoadingOverlay("hide");
+						toastr["warning"]("Harap masukan data yang sesuai!","warning");
 					}
 				});
 			});

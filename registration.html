@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Hotspot</title>
+        <title>Registration</title>
 
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -18,8 +18,13 @@
     </head>
     <body>
         <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+
+        <script type="text/javascript" src="assets/js/loadingoverlay.min.js"></script>
+        <script type="text/javascript" src="assets/toastr/toastr.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="assets/toastr/toastr.min.css">
         <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
-        <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
+
+        
 
         <script type="text/javascript" src="config.js"></script>
 
@@ -57,6 +62,7 @@
             function isNumeric(str) { return /^\d+$/.test(str); }
             $(document).ready(function(){
                 $('#btnSubmit').on('click', function(){
+                    $.LoadingOverlay("show");
                     var id_card = $('#id_card').val();
                     var first_name = $('#first_name').val();
                     var last_name = $('#last_name').val();
@@ -86,19 +92,22 @@
                             type: 'POST',
                             data: JSON.stringify(params),
                             success: function(result){
+                                $.LoadingOverlay("hide");
                                 if(result.status == 'error'){
                                     alert(result.message);
                                 }else{
-                                    alert('Terima Kasih!\r\nPendftaran anda telah kami terima, Kami akan segera menghubungi anda dalam waktu paling lambat 1x24 jam.');
+                                    toastr["success"]("Terima Kasih!<br>Pendftaran anda telah kami terima, Kami akan segera menghubungi anda dalam waktu paling lambat 1x24 jam.","success");
                                     window.location.href = "login.html";
                                 }
                             },
                             error: function(err){
+                                $.LoadingOverlay("hide");
                                 console.log(err);
                             }
                         });
                     }else{
-                        alert('Harap lengkapi formulir pendaftaran dengan data yang sesuai.');
+                        $.LoadingOverlay("hide");
+                        toastr["warning"]("Harap lengkapi formulir pendaftaran dengan data yang sesuai.","warning");
                     }
                 });
             });

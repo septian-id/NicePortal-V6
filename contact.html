@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Hotspot</title>
+        <title>Contact</title>
         
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -18,7 +18,11 @@
     </head>
     <body>
         <script type="text/javascript" src="http://niceportal.net/assets/js/jquery.min.js"></script>
-        <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
+
+        <script type="text/javascript" src="assets/js/loadingoverlay.min.js"></script>
+        <script type="text/javascript" src="assets/toastr/toastr.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="assets/toastr/toastr.min.css">
+
         <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
 
         <script type="text/javascript" src="config.js"></script>
@@ -49,6 +53,7 @@
 
         <script type="text/javascript">
             $(document).ready(function(){
+                $.LoadingOverlay("show");
                 var params = {}
                 params.user_id = config.user_id;
                 params.router_id = config.router_id;
@@ -62,8 +67,10 @@
                         $('#address').html(result.address);
                         $('#email').html(result.email);
                         $('#phone').html(result.phone);
+                        $.LoadingOverlay("hide");
                     },
                     error: function(err){
+                        $.LoadingOverlay("hide");
                         console.log(err);
                     }
                 });
