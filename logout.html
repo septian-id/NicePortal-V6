@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<title>$(identity) -> Disconnected</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-	<link id="theme" rel="stylesheet" type="text/css" href="assets/css/theme-green.css">
+	<link id="color" rel="stylesheet" type="text/css" href="assets/css/theme-green.css">
 	<style type="text/css">
 		* {
 			font-family: 'Ubuntu';
@@ -21,6 +21,8 @@
 </head>
 <body>
 	<script type="text/javascript" src="assets/js/jquery.min.js"></script>
+	<script type="text/javascript" src="assets/js/loadingoverlay.min.js"></script>
+
 	<script language="JavaScript">
 	    function openLogin() {
 			if (window.name != 'hotspot_logout') return true;
@@ -74,6 +76,28 @@
 
 	<script type="text/javascript" src="config.js"></script>
 	<script type="text/javascript">
+		$.LoadingOverlaySetup({background: "rgba(0, 0, 0, 0.5)", imageColor: "#FFF"});
+		$.LoadingOverlay("show");
+		$(document).ready(function(){
+			var params = {};
+			params.user_id = config.user_id;
+			params.router_id = config.router_id;
+			$.ajax({
+            	url: config.server + '/api/info',
+                type: 'post',
+                data: JSON.stringify(params),
+                success: function(result){
+                    console.log(result);
+                    $('#color').attr('href', 'assets/css/' + result.color);
+                    $.LoadingOverlay("hide");
+                },
+                error: function(err){
+               		$.LoadingOverlay("hide");
+                   	console.log(err);
+                }
+            });
+		});
+		
 		function showTime() {
 			var a_p = "";
 			var today = new Date();

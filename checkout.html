@@ -33,7 +33,7 @@
 		<script type="text/javascript" src="config.js"></script>
 
 		<div class="main border border-black card-4">
-			<div class="bar border-bottom">
+			<div class="bar border-bottom bottombar border-theme light-gray">
 				<a class="bar-item" href="login.html"><img src="assets/icons/back.png" width="16"> <span id="date"> Kembali</span></a>
 			</div>
 
@@ -62,7 +62,7 @@
 				<input type="text" id="full_name" class="input border round theme-l5 margin-bottom" required>
 
 				<span class="text-theme">Nomor WhatsApp</span>
-				<input type="number" id="phone" placeholder="Contoh : 085117018997" class="input border round theme-l5 margin-bottom" required>
+				<input type="number" id="phone" placeholder="" class="input border round theme-l5 margin-bottom" required>
 				<p class="border round border-gray padding light-gray small">
 					<b class="text-red">Perhatian!</b><br>
 					- Pembayaran anda akan terkonfirmasi otomatis oleh system kami.<br>
@@ -90,6 +90,7 @@
 
 
 		<script type="text/javascript">
+			$.LoadingOverlaySetup({background: "rgba(0, 0, 0, 0.5)", imageColor: "#FFF"});
 			function number_format(x){return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 			function isNumeric(str) { return /^\d+$/.test(str); } 
 
@@ -121,10 +122,29 @@
 		        });
 			}
 			$(document).ready(function(){
+				$.LoadingOverlay("show");
+
 				var product_id = document.location.href.split('?')[1].split('=')[1];
 				var params = {};
 				params.user_id = config.user_id;
 				params.router_id = config.router_id;
+
+				$.ajax({
+                    url: config.server + '/api/info',
+                    type: 'post',
+                    data: JSON.stringify(params),
+                    success: function(result){
+                        console.log(result);
+                        config.session = result.session;
+                        $('#color').attr('href', 'assets/css/' + result.color);
+                        $.LoadingOverlay("hide");
+                    },
+                    error: function(err){
+                    	$.LoadingOverlay("hide");
+                    	console.log(err);
+                   	}
+                });
+
 				params.product_id = product_id;
 				$.ajax({
 					url: config.server + '/api/product',
