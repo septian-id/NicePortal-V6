@@ -74,12 +74,12 @@
 	    </div>
 
 		<div class="main border border-black card-4">
-			<div class="bar">
-				<a class="bar-item" href="login.html"><img src="assets/icons/date.png" width="16"> <span id="date">2025-03-10</span></a>
-				<a class="bar-item right"><img src="assets/icons/time.png" width="16"> <span id="time">10:30:01 PM</span></a>
+			<div class="bar light-gray bottombar border-theme">
+				<a class="bar-item small" href="login.html"><img src="assets/icons/date.png" width="16"> <span id="date">2025-03-10</span></a>
+				<a class="bar-item small right"><img src="assets/icons/time.png" width="16"> <span id="time">10:30:01 PM</span></a>
 			</div>
-			<div class="container margin-top">
-				<div class="padding round topbar border-theme">
+			<div class="container padding-small">
+				<div class="padding round">
 					<div class="row margin-top margin-bottom">
 						<div class="col s3 center">
 							<a href="#" id="btn_mode" state="voucher">
@@ -108,8 +108,6 @@
 					</div>
 				</div>
 
-				<div id="slideshow" class="content display-container margin-bottom" style="width: 100%;"></div>
-
 				<form name="login" action="$(link-login-only)" method="post" $(if chap-id) onSubmit="return doLogin()" $(endif)>
 	                <input type="hidden" name="dst" value="$(link-orig)">
 	                <input type="hidden" name="popup" value="true">
@@ -118,9 +116,11 @@
 	                <input type="hidden" id="password" name="password" placeholder="Password" class="input border theme-l4 round margin-bottom" autocomplete="off" required>
 	                <button id="btnLogin" class="button block theme round margin-bottom">Masuk</button>
 	            </form>
+	            
+	            <div id="slideshow" class="content display-container margin-bottom" style="width: 100%;"></div>
 
-				<div id="notice" class="padding-small margin-bottom"></div>
-				<div id="product" class="row margin-bottom"></div>
+				<div id="notice" class="padding-small margin-bottom small"></div>
+				<div id="product" class="row margin-bottom small"></div>
 			</div>
 		</div>
 
@@ -135,7 +135,7 @@
 		</div>
 
 		<div id="notice_template" class="hide">
-			<div class="leftbar border-theme padding-small">
+			<div class="topbar border-bottom border-theme theme-l5 padding-small">
 				<b>{title}</b><br>
 				<div>{content}</div>
 			</div>
