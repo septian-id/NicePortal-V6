@@ -108,8 +108,6 @@
 					</div>
 				</div>
 
-				<div id="slideshow" class="content display-container margin-bottom" style="width: 100%;"></div>
-
 				<form name="login" action="$(link-login-only)" method="post" $(if chap-id) onSubmit="return doLogin()" $(endif)>
 	                <input type="hidden" name="dst" value="$(link-orig)">
 	                <input type="hidden" name="popup" value="true">
@@ -118,7 +116,8 @@
 	                <input type="hidden" id="password" name="password" placeholder="Password" class="input border theme-l4 round margin-bottom" autocomplete="off" required>
 	                <button id="btnLogin" class="button block theme round margin-bottom">Masuk</button>
 	            </form>
-
+	            
+	            <div id="slideshow" class="content display-container margin-bottom" style="width: 100%;"></div>
 				<div id="notice" class="padding-small margin-bottom"></div>
 				<div id="product" class="row margin-bottom"></div>
 			</div>
