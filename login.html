@@ -1,329 +1,339 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Hotspot</title>
-		<meta name="viewport" content="width=device-width, user-scalable=no">
-		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-		<link id="color" rel="stylesheet" type="text/css" href="assets/css/theme-green.css">
-		<style type="text/css">
-			html{background: #222;}
-			body{margin: auto; max-width: 480px; font-family: sans-serif;}
-			.main{min-height: 100vh; background: #FFF;}
-			a{text-decoration: none;}
-			input,select,textarea{outline: none;}
-		</style>
-	</head>
-	<body>
-		<script type="text/javascript" src="assets/js/jquery.min.js"></script>
-		<script type="text/javascript" src="assets/js/loadingoverlay.min.js"></script>
+<head>
+	<title>Hotspot</title>
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<link id="color" rel="stylesheet" type="text/css" href="assets/css/theme-dark-grey.css">
+	<link rel="stylesheet" type="text/css" href="fonts.css">
+	<style type="text/css">
+		body{
+			margin: auto; max-width: 420px;
+			font-family: -apple-system, BlinkMacSystemFont, "segoe ui", Verdana, Roboto, "helvetica neue", Arial, sans-serif, "apple color emoji";
+			font-size: 14px; 
+		}
+		.main{min-height: 100vh; background: #FFF;}
+		a{text-decoration: none;}
+		input,select,textarea{outline: none;}
+	</style>
+</head>
+<body class="theme-d5">
+	<script type="text/javascript" src="assets/js/jquery.min.js"></script>
+	<script type="text/javascript" src="config.js"></script>
 
-		<script type="text/javascript" src="assets/toastr/toastr.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="assets/toastr/toastr.min.css">
+	<div class="hide">
+		$(if chap-id)
+		<form name="sendin" action="$(link-login-only)" method="post">
+			<input type="hidden" name="username" />
+			<input type="hidden" name="password" />
+			<input type="hidden" name="dst" value="$(link-orig)" />
+			<input type="hidden" name="popup" value="true" />
+		</form>
 
-		<script type="text/javascript" src="config.js"></script>
-		<div class="hide">
-        $(if chap-id)
-        <form name="sendin" action="$(link-login-only)" method="post">
-            <input type="hidden" name="username" />
-            <input type="hidden" name="password" />
-            <input type="hidden" name="dst" value="$(link-orig)" />
-            <input type="hidden" name="popup" value="true" />
-        </form>
-
-        <script type="text/javascript" src="assets/js/md5.js"></script>
-        <script type="text/javascript">
-        	config.session = 'off';
-            function doLogin() {
-            	$.LoadingOverlay("show");
-                switch(config.session){
-	                case 'off':
-	                    document.sendin.username.value = document.login.username.value;
-	                    document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
-	                    document.sendin.submit();
-	                    break;
-	                case 'on':
-	                	params.user_id = config.user_id;
-	                	params.router_id = config.router_id;
-	                	params.username = document.login.username.value;
-	                    $.ajax({
-	                    	url: config.server + '/api/session',
-	                    	type: 'post',
-	                    	data: JSON.stringify(params),
-	                    	success: function(result){
-	                    		$.LoadingOverlay("hide");
-	                    		document.sendin.username.value = document.login.username.value;
-		                        document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
-		                        document.sendin.submit();
-		                        console.log(result);
-	                    	},
-	                    	error: function(err){ 
-	                    		$.LoadingOverlay("hide");
-	                    		console.log(err); 
-	                    		document.sendin.username.value = document.login.username.value;
-		                        document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
-		                        document.sendin.submit();
-	                    	}
-	                    });
-	                    return false;
-	                    break;
-	                }
-	                return false;
-	            }
-	        </script>
-	        $(endif)
-	    </div>
-
-		<div class="main border border-black card-4">
-			<div class="bar">
-				<a class="bar-item small text-gray" href="login.html"><img src="assets/icons/date.png" width="16"> <span id="date">2025-03-10</span></a>
-				<a class="bar-item right small text-gray"><img src="assets/icons/time.png" width="16"> <span id="time">10:30:01 PM</span></a>
-			</div>
-			<div class="container padding-small">
-				<div class="padding round topbar border-theme">
-					<div class="row margin-top margin-bottom">
-						<div class="col s3 center">
-							<a href="#" id="btn_mode" state="voucher">
-								<img src="assets/icons/mode.png" width="24"><br>
-								<span class="small">Mode</span>
-							</a>
-						</div>
-						<div class="col s3 center">
-							<a href="#" id="btn_register">
-								<img src="assets/icons/register.png" width="24"><br>
-								<span class="small">Pendaftaran</span>
-							</a>
-						</div>
-						<div class="col s3 center">
-							<a href="#" id="btn_help">
-								<img src="assets/icons/help.png" width="24"><br>
-								<span class="small">Bantuan</span>
-							</a>
-						</div>
-						<div class="col s3 center">
-							<a href="#" id="btn_contact">
-								<img src="assets/icons/contact.png" width="24"><br>
-								<span class="small">Kontak</span>
-							</a>
-						</div>
-					</div>
-				</div>
-
-				<form name="login" action="$(link-login-only)" method="post" $(if chap-id) onSubmit="return doLogin()" $(endif)>
-	                <input type="hidden" name="dst" value="$(link-orig)">
-	                <input type="hidden" name="popup" value="true">
-
-	                <input type="text" id="username" name="username" placeholder="Kode Voucher" class="input border theme-l4 round margin-bottom" autocomplete="off" required>
-	                <input type="hidden" id="password" name="password" placeholder="Password" class="input border theme-l4 round margin-bottom" autocomplete="off" required>
-	                <button id="btnLogin" class="button block theme round margin-bottom">Masuk</button>
-	            </form>
-	            
-	            <div id="slideshow" class="content display-container margin-bottom" style="width: 100%;"></div>
-				<div id="notice" class="padding-small margin-bottom"></div>
-				<div id="product" class="row margin-bottom"></div>
-			</div>
-		</div>
-
-		<div id="product_template" class="hide">
-			<div class="col s6 padding-small">
-				<div class="topbar round border border-theme padding-small">
-					<a href="checkout.html?product_id={product_id}" class="right buttom small theme padding-small round">Beli</a>
-					<b>{name}</b><br>
-					<i>{price}</i>
-				</div>
-			</div>
-		</div>
-
-		<div id="notice_template" class="hide">
-			<div class="topbar small border-bottom theme-l5 border-theme padding-small">
-				<b>{title}</b><br>
-				<div>{content}</div>
-			</div>
-		</div>
-
-		<div id="slide_template" class="hide">
-			<img class="{class} border round" {attribute} style="width:100%">
-		</div>
-
+		<script type="text/javascript" src="assets/js/md5.js"></script>
 		<script type="text/javascript">
-			$.LoadingOverlaySetup({background: "rgba(0, 0, 0, 0.5)", imageColor: "#FFF"});
-
 			config.session = 'off';
-			var params = {}
-			params.user_id = config.user_id;
-			params.router_id = config.router_id;
-
-
-			var slideIndex = 1;
-			function plusDivs(n){showDivs(slideIndex += n);}
-			function currentDiv(n){showDivs(slideIndex = n);}
-			function showDivs(n){
-			    var i;
-			    var x = document.getElementsByClassName("mySlides");
-			    if (n > x.length) {slideIndex = 1;}
-			    if (n < 1) {slideIndex = x.length;}
-			    for (i = 0; i < x.length; i++) {x[i].style.display = "none";}
-			    x[slideIndex - 1].style.display = "block";
+			function doLogin() {
+				switch(config.session){
+				case 'off':
+					document.sendin.username.value = document.login.username.value;
+					document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+					document.sendin.submit();
+					break;
+				case 'on':
+					params.user_id = config.user_id;
+					params.router_id = config.router_id;
+					params.username = document.login.username.value;
+					$.ajax({
+						url: config.server + '/api/session',
+						type: 'post',
+						data: JSON.stringify(params),
+						success: function(result){
+							document.sendin.username.value = document.login.username.value;
+							document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+							document.sendin.submit();
+							console.log(result);
+						},
+						error: function(err){
+							console.log(err); 
+							document.sendin.username.value = document.login.username.value;
+							document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+							document.sendin.submit();
+						}
+					});
+					return false;
+					break;
+				}
+				return false;
 			}
-			var user = document.getElementById('username');
-			var pass = document.getElementById('password');
-			function setpsw(){
-				user.value = user.value;
-				pass.value = user.value;
-			}
-			user.onkeyup = setpsw;
-			user.onchange = setpsw;
+		</script>
+		$(endif)
+	</div>
 
-			$(document).ready(function(){
-				$.LoadingOverlay("show");
-				// get info
-				$.ajax({
-					url: config.server + '/api/info',
-					type: 'post',
-					data: JSON.stringify(params),
-					success: function(result){
-						console.log(result);
-						config.session = result.session;
-						$('#color').attr('href', 'assets/css/' + result.color);
-						$.LoadingOverlay("hide");
-					},
-					error: function(err){
-						$.LoadingOverlay("hide");
-						console.log(err);
-					}
-				});
+	<div class="main theme">
+		<div class="theme" style="min-height: 150px;">
+			<br>
+			<div class="bar margin-bottom">
+				<a class="bar-item small" href="login.html"><i class="icon">&#xe806;</i> <span id="date">2025-03-10</span><br><i class="icon">&#xe805;</i> <b id="time">10:30:01 PM</b></a>
+				<a href="intent://$(ip)#Intent;scheme=http;package=com.android.chrome;end" class="bar-item right small"><i class="icon icon-large">&#xf268;</i></a>
+			</div>
 
-				// get product
-				$.ajax({
-					url: config.server + '/api/product',
-					type: 'post',
-					data: JSON.stringify(params),
-					success: function(result){
-						console.log(result);
-						$.each(result, function(index, row){
-							var x = $('#product_template').html();
-							var y = x.replace('{name}', row.name);
-							var z = y.replace('{price}', row.price);
-							var a =  z.replace('{product_id}', row.product_id);
-							$('#product').append(a);
-						});
-					},
-					error: function(err){ console.log(err); }
-				});
+			<div class="row border round border-theme margin-top margin-bottom">
+				<div class="col s3 center">
+					<a href="#" id="btn_mode" state="voucher" class="button small padding-small hover-none">
+						<i class="icon icon-large">&#xf0ec;</i><br>
+						<span class="small">Mode</span>
+					</a>
+				</div>
+				<div class="col s3 center">
+					<a href="#" id="btn_register" class="button small padding-small hover-none">
+						<i class="icon icon-large">&#xf2be;</i></i><br>
+						<span class="small">Pendaftaran</span>
+					</a>
+				</div>
+				<div class="col s3 center">
+					<a href="#" id="btn_help" class="button small padding-small hover-none">
+						<i class="icon icon-large">&#xe807;</i></i><br>
+						<span class="small">Bantuan</span>
+					</a>
+				</div>
+				<div class="col s3 center">
+					<a href="#" id="btn_contact" class="button small padding-small hover-none">
+						<i class="icon icon-large">&#xf230;</i></i><br>
+						<span class="small">Kontak</span>
+					</a>
+				</div>
+			</div>
 
-				// get images
-				$.ajax({
-					url: config.server + '/api/slideshow',
-					type: 'post',
-					data: JSON.stringify(params),
-					success: function(result){
-						console.log(result);
-						$.each(result, function(index, row){
-							var x = $('#slide_template').html();
-							var y = x.replace('{attribute}', 'src="' + config.server + '/assets/upload/' + row.file + '"');
-							var z = y.replace('{class}', 'mySlides');
-							$('#slideshow').append(z);
-						});
-						showDivs(slideIndex);
-		                setInterval(function() {
-		                    plusDivs(+1);
-		                }, 3000);
-					},
-					error: function(err){ console.log(err); }
-				});
+			<div class="padding-small white margin-top" style="border-top-left-radius: 25px; border-top-right-radius: 25px;">
+				<table>
+					<tr>
+						<td style="vertical-align: middle; text-align:center; width: 60px;">
+							<img id="logo" src="assets/images/logo.png" width="50" height="50" style="border-radius: 50%;">
+						</td>
+						<td>
+							<b id="serverName">Name</b><br>
+							<i class="text-gray">Internet Service Provider</i>
+						</td>
+					</tr>
+				</table>
 
-				// get notice
-				$.ajax({
-					url: config.server + '/api/notice',
-					type: 'post',
-					data: JSON.stringify(params),
-					success: function(result){
-						console.log(result);
-						$.each(result, function(index, row){
-							var x = $('#notice_template').html();
-							var y = x.replace('{title}', row.title);
-							var z = y.replace('{content}', row.content);
-							$('#notice').append(z);
-						})
-					},
-					error: function(err){ console.log(err); }
-				});
+				<div class="display-middle topbar border border-red white round" id="error" style="min-width:300px; max-width: 300px; display: none;">
+					<h3 align="center" class="text-red">Error!</h3>
+					<p align="center">$(error)</p>
+					<p align="center"><button onclick="$('#error').hide()" class="button red round">OK</button></p>
+				</div>
+				<form name="login" action="$(link-login-only)" method="post" $(if chap-id) onSubmit="return doLogin()" $(endif)>
+					<input type="hidden" name="dst" value="$(link-orig)">
+					<input type="hidden" name="popup" value="true">
+
+					<p align="center">Silahkan masukan kode voucher anda.</p>
+
+					<input type="text" id="username" style="text-align: center; font-weight: 900;" name="username" placeholder="Kode Voucher" class="input border text-theme border-theme theme-l4 round margin-bottom" autocomplete="off" required>
+					<input type="hidden" id="password" name="password" placeholder="Password" class="input border theme-l4 round margin-bottom" autocomplete="off" required>
+					<button id="btnLogin" class="button block theme round margin-bottom"><i class="icon">&#xe803;</i> Masuk</button>
+				</form>
+				
+				<div id="notice" class="margin-bottom"></div>
+				<div id="product" class="row margin-bottom"></div>
+				<div id="slideshow" class="content margin-bottom margin-top" style="width: 100%;"></div>
+				
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		config.session = 'off';
+		var params = {}
+		params.user_id = config.user_id;
+		params.router_id = config.router_id;
+
+		var slideIndex = 1;
+		function plusDivs(n){showDivs(slideIndex += n);}
+		function currentDiv(n){showDivs(slideIndex = n);}
+		function showDivs(n){
+			var i; var x = document.getElementsByClassName("mySlides");
+			if (n > x.length) {slideIndex = 1;}
+			if (n < 1) {slideIndex = x.length;}
+			for (i = 0; i < x.length; i++) {x[i].style.display = "none";}
+				x[slideIndex - 1].style.display = "block";
+		}
+
+		function get_info(){
+			$.ajax({
+				url: config.server + '/api/info',
+				type: 'post',
+				data: JSON.stringify(params),
+				success: function(result){
+					console.log(result);
+					config.session = result.session;
+					$('#color').attr('href', 'assets/css/' + result.color);
+					var date = new Date();
+					today = date.getMonth() + "-" + date.getDate();
+					if(typeof result.logo !== undefined){ $('#logo').attr('src', 'https://niceportal.net/assets/upload/' + result.logo + '?load=' + today)}
+					$('#serverName').html(result.name);
+					get_product();
+				},
+				error: function(err){
+					console.log(err); 
+					alert('get_info failed.');
+				}
+			});
+		}
+
+		function get_product(){
+			$.ajax({
+				url: config.server + '/api/product',
+				type: 'post',
+				data: JSON.stringify(params),
+				success: function(result){
+					console.log(result);
+					$.each(result, function(index, row){
+						$('#product').append(`
+								<div class="col s6" style="padding:1px">
+									<div class="round topbar border border-theme theme-l5 padding-small">
+										<a href="checkout.html?product_id=${row.product_id}" class="right buttom small theme padding-small round"><i class="icon">&#xe801;</i> Beli</a>
+										<b class="text-theme">${row.name}</b><br>
+										<i> Rp ${row.price}</i>
+									</div>
+								</div>
+						`);
+					});
+					get_images();
+				},
+				error: function(err){
+					console.log(err);
+					alert('get_product failed');
+				}
+			});
+		}
+
+		function get_images(){
+			$.ajax({
+				url: config.server + '/api/slideshow',
+				type: 'post',
+				data: JSON.stringify(params),
+				success: function(result){
+					console.log(result);
+					$.each(result, function(index, row){
+						$('#slideshow').append(`<img class="mySlides border border-theme round" src="${config.server}/assets/upload/${row.file}" style="width:100%">`);
+					});
+					showDivs(slideIndex);
+					setInterval(function() {
+						plusDivs(+1);
+					}, 3000);
+					get_notice();
+				},
+				error: function(err){
+					console.log(err);
+					alert('get_images failed');
+				}
+			});
+		}
+
+		function get_notice(){
+			$.ajax({
+				url: config.server + '/api/notice',
+				type: 'post',
+				data: JSON.stringify(params),
+				success: function(result){
+					console.log(result);
+					$.each(result, function(index, row){
+						$('#notice').append(`
+								<div class="small border border-theme round">
+									<div class="theme padding-small"><b><i class="icon">&#xe807;</i> ${row.title}</b></div>
+									<div class="padding-small text-gray">${row.content}</div>
+								</div>
+						`);
+					})
+				},
+				error: function(err){
+					console.log(err);
+					alert('get_notice failed');
+				}
+			});
+		}
+
+		var user = document.getElementById('username');
+		var pass = document.getElementById('password');
+		function setpsw(){user.value = user.value; pass.value = user.value;}
+
+		user.onkeyup = setpsw;
+		user.onchange = setpsw;
+
+		$(document).ready(function(){
+			get_info();
 
 				// buttom mode
-				$('#btn_mode').on('click', function(){
-					var state = this.getAttribute('state');
-					switch(state){
-						case 'voucher': 
-							user.placeholder = 'Username';
-							user.onkeyup = '';
-							user.onchange = '';
-							pass.type = 'password';
-							this.setAttribute('state', 'member');
-						break;
-						case 'member':
-							user.placeholder = 'Kode Voucher';
-							user.onkeyup = setpsw;
-							user.onchange = setpsw;
-							pass.type = 'hidden';
-							this.setAttribute('state', 'voucher');
-						break;
-					}
-				});
-
-				$('#btn_register').on('click', function(){window.location.href = 'registration.html';});
-				$('#btn_help').on('click', function(){window.location.href = 'help.html';});
-				$('#btn_contact').on('click', function(){window.location.href = 'contact.html';});
+			$('#btn_mode').on('click', function(){
+				var state = this.getAttribute('state');
+				switch(state){
+				case 'voucher': 
+					user.placeholder = 'Username';
+					user.onkeyup = '';
+					user.onchange = '';
+					pass.type = 'password';
+					this.setAttribute('state', 'member');
+					break;
+				case 'member':
+					user.placeholder = 'Kode Voucher';
+					user.onkeyup = setpsw;
+					user.onchange = setpsw;
+					pass.type = 'hidden';
+					this.setAttribute('state', 'voucher');
+					break;
+				}
 			});
 
+			$('#btn_register').on('click', function(){window.location.href = 'registration.html';});
+			$('#btn_help').on('click', function(){window.location.href = 'help.html';});
+			$('#btn_contact').on('click', function(){window.location.href = 'contact.html';});
+		});
 
-			function showTime() {
-			    var a_p = "";
-			    var today = new Date();
-			    var curr_hour = today.getHours();
-			    var curr_minute = today.getMinutes();
-			    var curr_second = today.getSeconds();
-			    if (curr_hour < 12) {
-			        a_p = "AM";
-			    } else {
-			        a_p = "PM";
-			    }
-			    if (curr_hour == 0) {
-			        curr_hour = 12;
-			    }
-			    if (curr_hour > 12) {
-			        curr_hour = curr_hour - 12;
-			    }
-			    curr_hour = checkTime(curr_hour);
-			    curr_minute = checkTime(curr_minute);
-			    curr_second = checkTime(curr_second);
-			    $("#time").html(curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p);
+
+		function showTime() {
+			var a_p = "";
+			var today = new Date();
+			var curr_hour = today.getHours();
+			var curr_minute = today.getMinutes();
+			var curr_second = today.getSeconds();
+			if (curr_hour < 12) {
+				a_p = "AM";
+			} else {
+				a_p = "PM";
 			}
-
-			function checkTime(i) {
-			    if (i < 10) {
-			        i = "0" + i;
-			    }
-			    return i;
+			if (curr_hour == 0) {
+				curr_hour = 12;
 			}
-			setInterval(showTime, 500);
+			if (curr_hour > 12) {
+				curr_hour = curr_hour - 12;
+			}
+			curr_hour = checkTime(curr_hour);
+			curr_minute = checkTime(curr_minute);
+			curr_second = checkTime(curr_second);
+			$("#time").html(curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p);
+		}
 
-			var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-			var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
-			var date = new Date();
-			var day = date.getDate();
-			var month = date.getMonth();
-			var thisDay = date.getDay(),
-			    thisDay = myDays[thisDay];
-			var yy = date.getYear();
-			var year = (yy < 1000) ? yy + 1900 : yy;
-			$("#date").html(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
-		</script>
+		function checkTime(i) {
+			if (i < 10) {
+				i = "0" + i;
+			}
+			return i;
+		}
+		setInterval(showTime, 500);
 
-		<div class="hide">
-		    $(if error)
-		    <script type="text/javascript">
-		        toastr["error"]("$(error)","error");
-		    </script>
-		    $(endif)
-		</div>
-	</body>
+		var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+		var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
+		var date = new Date();
+		var day = date.getDate();
+		var month = date.getMonth();
+		var thisDay = date.getDay(),
+		thisDay = myDays[thisDay];
+		var yy = date.getYear();
+		var year = (yy < 1000) ? yy + 1900 : yy;
+		$("#date").html(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
+	</script>
+	<div class="hide">$(if error)<script type="text/javascript">$('#error').show();</script>$(endif)</div>
+</body>
 </html>

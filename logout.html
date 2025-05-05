@@ -7,6 +7,7 @@
 	<title>$(identity) -> Disconnected</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<link id="color" rel="stylesheet" type="text/css" href="assets/css/theme-green.css">
+	<link id="color" rel="stylesheet" type="text/css" href="fonts.css">
 	<style type="text/css">
 		* {
 			font-family: 'Ubuntu';
@@ -21,7 +22,6 @@
 </head>
 <body>
 	<script type="text/javascript" src="assets/js/jquery.min.js"></script>
-	<script type="text/javascript" src="assets/js/loadingoverlay.min.js"></script>
 
 	<script language="JavaScript">
 	    function openLogin() {
@@ -41,29 +41,30 @@
 			<span id="time" class="small"></span>
 		</p>
 		<p align="center">
-			<img src="assets/icons/identity.png" width="50" height="50"><br>$(username)
+			<i class="icon icon-large text-theme">&#xf2be;</i><br>$(username)
 		</p>
 		<p align="center">Anda telah terputus dari jaringan internet.</p>
 		<hr>
 			<p align="center">
 			<div class="row small">
 				<div class="col s4 center margin-bottom">
-					<a href="#"><img src="assets/icons/ip-address.png" width="50" height="50"></a><br>IP<br>$(ip)
+					<i class="icon icon-large text-theme">&#xf0e8;</i><br>IP<br>$(ip)
 				</div>
 				<div class="col s4 center margin-bottom">
-					<a href="#"><img src="assets/icons/mac-address.png" width="50" height="50"></a><br>MAC<br>$(mac)
+					<i class="icon icon-large text-theme">&#xe801;</i><br>MAC<br>$(mac)
 				</div>
 				<div class="col s4 center margin-bottom">
-					<a href="#"><img src="assets/icons/uptime.png" width="50" height="50"></a><br>Uptime<br>$(uptime)
+					<i class="icon icon-large text-theme">&#xf252;</i><br>Uptime<br>$(uptime)
 				</div>
 				<div class="col s4 center margin-bottom">
-					<a href="#"><img src="assets/icons/time.png" width="50" height="50"></a><br>Session Time Left<br>$(session-time-left)
+					<i class="icon icon-large text-theme">&#xe805;</i><br>Session Time Left<br>$(session-time-left)
+				</div>
+
+				<div class="col s4 center margin-bottom">
+					<i class="icon icon-large text-theme">&#xe809;</i><br>Download<br>$(bytes-out-nice)
 				</div>
 				<div class="col s4 center margin-bottom">
-					<a href="#"><img src="assets/icons/download.png" width="50" height="50"></a><br>Download<br>$(bytes-out-nice)
-				</div>
-				<div class="col s4 center margin-bottom">
-					<a href="#"><img src="assets/icons/upload.png" width="50" height="50"></a><br>Upload<br>$(bytes-in-nice)
+					<i class="icon icon-large text-theme">&#xe808;</i><br>Upload<br>$(bytes-in-nice)
 				</div>
 			</div>
 			</p>

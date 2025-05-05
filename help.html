@@ -2,14 +2,15 @@
 <html>
     <head>
         <title>Help Center</title>
-
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-        <link id="color" rel="stylesheet" type="text/css" href="assets/css/theme-green.css">
+        <link id="color" rel="stylesheet" type="text/css" href="assets/css/theme-dark-grey.css">
+        <link id="color" rel="stylesheet" type="text/css" href="fonts.css">
 
         <style type="text/css">
             html{background: #222;}
-            body{margin: auto; max-width: 480px; font-family: sans-serif;}
+            body{margin: auto; max-width: 420px; font-family: sans-serif;}
             .main{min-height: 100vh; background: #FFF;}
             a{text-decoration: none;}
             input,select,textarea{outline: none;}
@@ -18,11 +19,6 @@
     </head>
     <body>
         <script type="text/javascript" src="assets/js/jquery.min.js"></script>
-
-        <script type="text/javascript" src="assets/js/loadingoverlay.min.js"></script>
-        <script type="text/javascript" src="assets/toastr/toastr.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="assets/toastr/toastr.min.css">
-
         <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
         
 
@@ -30,7 +26,7 @@
 
         <div class="main border border-black card-4">
             <div class="bar border-bottom bottombar light-gray border-theme">
-                <a class="bar-item" href="login.html"><img src="assets/icons/back.png" width="16"> <span id="date"> Kembali</span></a>
+                <a class="bar-item" href="login.html"><i class="icon text-theme">&#xe804;</i> <span id="date"> Kembali</span></a>
             </div>
 
             <div class="container margin-top padding-small" id="help"></div>
@@ -44,9 +40,7 @@
         </div>
 
         <script type="text/javascript">
-            $.LoadingOverlaySetup({background: "rgba(0, 0, 0, 0.5)", imageColor: "#FFF"});
             $(document).ready(function(){
-                $.LoadingOverlay("show");
                 var params = {}
                 params.user_id = config.user_id;
                 params.router_id = config.router_id;
@@ -59,10 +53,8 @@
                         console.log(result);
                         config.session = result.session;
                         $('#color').attr('href', 'assets/css/' + result.color);
-                        $.LoadingOverlay("hide");
                     },
                     error: function(err){ 
-                        $.LoadingOverlay("hide");
                         console.log(err);
                     }
                 });
