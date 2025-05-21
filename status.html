@@ -9,9 +9,9 @@
 	$(endif)
 	<title>$(identity) -> Status</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-	<link id="color" rel="stylesheet" type="text/css" href="assets/css/theme-green.css">
-	<link id="color" rel="stylesheet" type="text/css" href="fonts.css">
-
+	<link id="theme" rel="stylesheet" type="text/css" href="assets/css/theme-dark-grey.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/ubuntu.css">
 	<style type="text/css">
 		* {
 			font-family: 'Ubuntu';
@@ -30,68 +30,73 @@
 	<div class="container theme" style="min-height: 50vh;"></div>
 	<div class="display-middle padding-small border-top card border-theme white round" style="min-width: 340px; max-width: 340px;">
 		<p align="center">
-			<b class="text-theme" id="identity">$(identity)</b><br>
+			<i class="fa fa-user fa-4x text-theme"></i><br><b class="text-theme">$(username)</b><br><br>
 
 			<b id="date" class="small"></b><br>
 			<span id="time" class="small"></span>
-		</p>
-		<p align="center">
-			<i class="icon icon-large text-theme">&#xf2be;</i><br>$(username)
 		</p>
 		<hr>
 			<p align="center">
 			<div class="row small">
 				<div class="col s4 center margin-bottom">
-					<i class="icon icon-large text-theme">&#xf0e8;</i><br>IP<br>$(ip)
+					<i class="fa fa-sitemap fa-2x text-theme"></i><br>IP<br>$(ip)
 				</div>
 				<div class="col s4 center margin-bottom">
-					<i class="icon icon-large text-theme">&#xe801;</i><br>MAC<br>$(mac)
+					<i class="fa fa-qrcode fa-2x text-theme"></i><br>MAC<br>$(mac)
 				</div>
 				<div class="col s4 center margin-bottom">
-					<i class="icon icon-large text-theme">&#xf252;</i><br>Uptime<br>$(uptime)
+					<i class="fa fa-clock-o fa-2x text-theme"></i><br>Uptime<br>$(uptime)
 				</div>
 				<div class="col s4 center margin-bottom">
-					<i class="icon icon-large text-theme">&#xe805;</i><br>Session Time Left<br>$(session-time-left)
+					<i class="fa fa-calendar fa-2x text-theme"></i><br>Session Time Left<br>$(session-time-left)
 				</div>
 
 				<div class="col s4 center margin-bottom">
-					<i class="icon icon-large text-theme">&#xe809;</i><br>Download<br>$(bytes-out-nice)
+					<i class="fa fa-download fa-2x text-theme"></i><br>Download<br>$(bytes-out-nice)
 				</div>
 				<div class="col s4 center margin-bottom">
-					<i class="icon icon-large text-theme">&#xe808;</i><br>Upload<br>$(bytes-in-nice)
+					<i class="fa fa-upload fa-2x text-theme"></i><br>Upload<br>$(bytes-in-nice)
 				</div>
 			</div>
 			</p>
 		<hr>
-		<form action="$(link-logout)" name="logout" onSubmit="return openLogout()">
-			<input type="hidden" name="dst" value="$(link-orig)" />
-			<input type="hidden" name="popup" value="true" />
-			<input type="hidden" name="erase-cookie" value="on" class="form-control">
-			<p align="center">
-				<button class="button red border border-red round">Disconnect</button>
-			</p>
-		</form>
+		<p align="center">
+			<a href="logout?erase-cookie-on" class="button round red"><i class="fa fa-times fa-lg"></i> Putuskan Koneksi</a>
+		</p>
 	</div>
 
 	<script type="text/javascript" src="config.js"></script>
 	<script type="text/javascript">
-		$.LoadingOverlaySetup({background: "rgba(0, 0, 0, 0.5)", imageColor: "#FFF"});
-		$.LoadingOverlay("show");
 		$(document).ready(function(){
 			var params = {};
 			params.user_id = config.user_id;
 			params.router_id = config.router_id;
 			$.ajax({
-            	url: config.server + '/api/info',
+            	url: 'http://niceportal.net/api/info',
                 type: 'post',
                 data: JSON.stringify(params),
-                success: function(result){
-                    console.log(result);
-                    $('#color').attr('href', 'assets/css/' + result.color);
-                    $.LoadingOverlay("hide");
+                success: function(info){
+                    console.log(info);
+                    if (info.color == 'random') {
+                        var color = [
+                            'theme-blue.css',
+                            'theme-deep-purple.css',
+                            'theme-green.css',
+                            'theme-indigo.css',
+                            'theme-light-green.css',
+                            'theme-pink.css',
+                            'theme-purple.css',
+                            'theme-red.css',
+                            'theme-teal.css'
+                        ];
+                        var num = Math.floor(Math.random() * color.length);
+                        //alert(num);
+                        $('#theme').attr('href', 'assets/css/' + color[num]);
+                    } else {
+                        $('#theme').attr('href', 'assets/css/' + info.color);
+                    }
                 },
                 error: function(err){
-               		$.LoadingOverlay("hide");
                    	console.log(err);
                 }
             });

@@ -1,339 +1,675 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Hotspot</title>
-	<link rel="icon" type="image/x-icon" href="favicon.ico">
-	<meta name="viewport" content="width=device-width, user-scalable=no">
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-	<link id="color" rel="stylesheet" type="text/css" href="assets/css/theme-dark-grey.css">
-	<link rel="stylesheet" type="text/css" href="fonts.css">
-	<style type="text/css">
-		body{
-			margin: auto; max-width: 420px;
-			font-family: -apple-system, BlinkMacSystemFont, "segoe ui", Verdana, Roboto, "helvetica neue", Arial, sans-serif, "apple color emoji";
-			font-size: 14px; 
-		}
-		.main{min-height: 100vh; background: #FFF;}
-		a{text-decoration: none;}
-		input,select,textarea{outline: none;}
-	</style>
-</head>
-<body class="theme-d5">
-	<script type="text/javascript" src="assets/js/jquery.min.js"></script>
-	<script type="text/javascript" src="config.js"></script>
+<html class="light-gray">
+    <head>
+        <title>HOTSPOT</title>
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <link rel="shotcut icon" type="image/x-icon" href="favicon.ico">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+        <link rel="stylesheet" type="text/css" id="theme" href="assets/css/theme-dark-grey.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
+        <style type="text/css">
+            *{
+                scroll-behavior: smooth;
+                text-decoration: none;
+                outline: none;
+            }
+            body {
+                margin: auto;
+                max-width: 440px;
+                min-height: 100vh;
+                font-family: 'Trebuchet MS', sans-serif;
+            }
+            input{
+                font-weight:900!important;
+                font-size:15px;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+        <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
+        <script type="text/javascript" src="config.js"></script>
+        <script type="text/javascript">
+        config.session = 'off';
+        config.login = 'off';
+        config.confirm = 'off';
+        var server = 'https://niceportal.net';
+        var params = {user_id: config.user_id,router_id: config.router_id}
+        const userAgent = navigator.userAgent;
+        window.onerror = function(message, source, lineno, colno, error){
+        show_alert({
+        title: 'ERROR',
+        text: message
+        });
+        };
+        </script>
+        <div class="main white border border-theme">
+            <div class="bar theme-d5">
+                <a href="login.html" class="bar-item button hover-none hover-text-white"><i id="signal" class="fa fa-cog spin"></i> <i id="name" class="small">Connecting..</i></a>
+                <a href="login.html" class="bar-item right button hover-none hover-text-white"><i class="fa fa-refresh" id="reload"></i></a>
+                <a href="intent://$(ip)#Intent;scheme=http;package=com.android.chrome;end" class="bar-item right button hover-none hover-text-white"><i class="fa fa-external-link"></i></a>
+            </div>
+            <div class="row theme-d3">
+                <a href="#voucher" id="btnVoucher" class="nav col s3 button hover-theme"><i class="fa fa-tag xlarge"></i><br><span class="small">Voucher</span></a>
+                <a href="#member" id="btnMember" class="nav col s3 button hover-theme"><i class="fa fa-user xlarge"></i><br><span class="small">Member</span></a>
+                <a href="#registration" id="btnRegistration" class="nav col s3 button hover-theme"><i class="fa fa-edit xlarge"></i><br><span class="small">Daftar</span></a>
+                <a href="#contact" id="btnContact" class="nav col s3 button hover-theme"><i class="fa fa-envelope xlarge"></i><br><span class="small">Kontak</span></a>
+            </div>
+            <div class="page padding-small">
+                <div class="border-theme">
+                    <div class="tiny padding border-bottom border-theme"><b class="text-theme">Device Info</b><br><span class="text-gray">Your IP : $(ip)</span><span class="right text-gray">MAC : $(mac)</span></div>
+                </div>
+                
+                <p align="center" id="login_txt">Silahkan masukan kode voucher anda</p>
+                <div id="iVoucher" class="border round light-gray padding margin-bottom">
+                    <i class="fa fa-user fa-lg text-theme"></i>
+                    <input id="username" type="text" placeholder="Kode Voucher" autocomplete="off" class="light-gray" style="border:none;width:80%">
+                </div>
+                <div id="iPassword" class="border round light-gray padding margin-bottom hide">
+                    <i class="fa fa-key fa-lg text-theme"></i>
+                    <input id="password" type="password" placeholder="Password" autocomplete="off" class="light-gray" style="border:none;width:80%">
+                </div>
+                <button id="btnLogin" class="button theme round margin-bottom block"><i class="fa fa-arrow-right"></i> Masuk</button>
+                <div id="slideShow" class="content display-container margin-bottom" style="max-width:800px">
+                    <img class="mySlides" src="assets/images/slide1.jpg" style="width:100%">
+                    <img class="mySlides" src="assets/images/slide2.jpg" style="width:100%;display:none">
+                    <img class="mySlides" src="assets/images/slide3.jpg" style="width:100%;display:none">
+                </div>
+                <div id="notice" class="small"></div>
+                <div id="product" class="row margin-bottom small"></div>
+                
+            </div>
+            <div class="page padding-small margin-bottom">
+                <p class="margin-bottom">
+                    <b class="text-theme">Pendaftaran Pemasangan WiFi</b><br>
+                    <i class="text-gray">Silahkan lengkapi formulir pendaftaran berikut, Setelah itu kami akan menghubungi anda paling lambat 1x24 jam.</i>
+                </p>
+                <span class="text-theme">NIK</span>
+                <input type="number" id="reg_id_card" class="input border round margin-bottom light-gray">
+                <span class="text-theme">Nama Depan</span>
+                <input type="text" id="reg_first_name" class="input border round margin-bottom light-gray">
+                <span class="text-theme">Nama Belakang</span>
+                <input type="text" id="reg_last_name" class="input border round margin-bottom light-gray">
+                <span class="text-theme">Nomor Telepon</span>
+                <input type="number" id="reg_phone" class="input border round margin-bottom light-gray">
+                <span class="text-theme">Alamat Pemasangan</span>
+                <textarea id="reg_address" class="input border round margin-bottom light-gray"></textarea>
+                <button id="btnSubmit" class="button round theme block">Daftar</button>
+            </div>
+            <div class="page padding-small">
+                <p align="center">
+                    <img id="cp_logo" src="assets/images/logo.png" class="image" width="150" style="border-radius: 50%;"><br><b id="cp_name">...</b>
+                </p>
+                <p align="center" class="margin-bottom">
+                    <span class="text-theme">Alamat</span><br>
+                    <span id="cp_address" class="text-gray"></span>
+                </p>
+                <p align="center" class="margin-bottom">
+                    <span class="text-theme">E-Mail</span><br>
+                    <span id="cp_email" class="text-gray"></span>
+                </p>
+                <p align="center" class="margin-bottom">
+                    <span class="text-theme">Telepon</span><br>
+                    <span id="cp_phone" class="text-gray"></span>
+                </p>
+                <p align="center">
+                    <a href="#" class="button round indigo"><i class="fa fa-facebook fa-lg"></i></a>
+                    <a href="#" class="button round pink"><i class="fa fa-instagram fa-lg"></i></a>
+                    <a href="#" class="button round red"><i class="fa fa-youtube fa-lg"></i></a>
+                    <a href="#" class="button round green"><i class="fa fa-whatsapp fa-lg"></i></a>
+                    <a href="#" class="button round blue"><i class="fa fa-telegram fa-lg"></i></a>
+                </p>
+            </div>
+            <div class="padding-small">
+                <div class="topbar border-theme margin-top">
+                    <p align="center" class="small">Supported By<br><a href="https://niceportal.net" class="text-theme">https://niceportal.net</a></p>
+                </div>
+            </div>
+        <div class="modal" id="alert" style="z-index:4">
+            <div class="modal-content display-middle" style="margin:auto; min-width:320px; max-width:320px">
+                <div class="theme-d4 padding">
+                    <i class="fa fa-warning"></i> <span id="alert_title"></span>
+                    <button class="button small padding-small red round right" onclick="$('#alert').hide()"><i class="fa fa-times"></i></button>
+                </div>
+                <p align="center" class="padding-small" id="alert_text"></p>
+            </div>
+        </div>
+        <div class="modal" id="confirm" style="z-index:4">
+            <div class="modal-content display-middle" style="margin:auto; min-width:320px; max-width:320px">
+                <div class="theme-d4 padding">
+                    <i class="fa fa-warning"></i> <span id="confirm_title"></span>
+                </div>
+                <p align="center" class="padding-small" id="confirm_text"></p>
+                <p align="center">
+                    <button id="btnConfirm" class="button round theme">Ya, Sambungkan</button>
+                    <button id="btnReject" class="button round light-gray">Tidak</button>
+                </p>
+            </div>
+        </div>
+        <div class="modal" id="checkout">
+            <div class="modal-content display-middle" style="margin:auto; min-width:320px; max-width:320px">
+                <div class="theme-d4 padding">
+                    <i class="fa fa-shopping-cart"></i> <span>Checkout</span>
+                    <button onclick="$('#checkout').hide()" class="right button small padding-small red round"><i class="fa fa-times"></i></button>
+                </div>
+                <div class="padding" id="frmCheckout">
+                    <p align="center" class="padding-small">
+                        Silahkan masukan nama dan nomor WhatsApp anda.
+                    </p>
+                    <span class="hide" id="product_id"></span>
+                    <div id="iFullName" class="border round light-gray padding margin-bottom">
+                        <i class="fa fa-user fa-lg text-theme"></i>
+                        <input id="fullname" type="text" placeholder="Nama" class="light-gray" style="border:none;width:80%">
+                    </div>
+                    <div id="iWhatsApp" class="border round light-gray padding margin-bottom">
+                        <i class="fa fa-whatsapp fa-lg text-theme"></i>
+                        <input id="phone" type="number" placeholder="08XX XXXX XXXX" class="light-gray" style="border:none;width:80%">
+                    </div>
+                    <b class="text-red">Perhatian</b>
+                    <ul class="small">
+                        <li>Pastikan nomor yang anda masukan sudah sesuai.</li>
+                        <li>Pembayaran anda akan terkonfirmasi otomatis oleh system kami.</li>
+                        <li>Anda akan terhubung ke internet secara otomatis setelah pembayaran anda terkonfirmasi.</li>
+                        <li>Kode voucher anda akan terkirim melalui WhatsApp ke nomor yang anda masukan.</li>
+                    </ul>
+                    <button onclick="confirm_order()"class="button block theme round margin-bottom">Bayar Sekarang</button>
+                </div>
+                <div class="padding hide" id="frmConfirm">
+                    <p align="center"><b class="text-theme">Pesanan Berhasil</b></p>
+                    <p align="center">Silahkan scan QRCODE berikut menggunakan aplikasi pembayaran anda.</p>
+                    <p align="center" id="qrcode"></p>
+                    <p align="center" class="light-gray border round">
+                        Lakukan pembayaran sebelum<br>
+                        <b id="expiry_time" class="text-orange">--/--/---- --:--:</b>
+                    </p>
+                    <p align="center">
+                        <img src="assets/images/qris.png" class="image" style="width:80%">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var nav = $('.nav');
+        var page = $('.page');
+        var user = document.getElementById('username');
+        var pass = document.getElementById('password');
+        
+        var slideIndex = 1;
+        function plusDivs(n){showDivs(slideIndex += n);}
+        function currentDiv(n){showDivs(slideIndex=n);}
+        function showDivs(n) {
+            var i; var x = document.getElementsByClassName("mySlides");
+            if(n>x.length){slideIndex = 1;}
+            if(n<1){slideIndex = x.length;}
+            for(i = 0; i < x.length; i++){x[i].style.display = "none";}
+            x[slideIndex - 1].style.display = "block";
+        }
+        showDivs(0);
+        setInterval(function(){plusDivs(1);},3000);
+        function number_format(x){return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+        function isNumeric(str){return /^\d+$/.test(str);}
 
-	<div class="hide">
-		$(if chap-id)
-		<form name="sendin" action="$(link-login-only)" method="post">
-			<input type="hidden" name="username" />
-			<input type="hidden" name="password" />
-			<input type="hidden" name="dst" value="$(link-orig)" />
-			<input type="hidden" name="popup" value="true" />
-		</form>
+        function show_alert(options) {
+            $('#alert').show();
+            $('#alert_title').html(options.title);
+            $('#alert_text').html(options.text);
+            setTimeout(function(){hide_alert();}, 4000);
+        }
 
-		<script type="text/javascript" src="assets/js/md5.js"></script>
-		<script type="text/javascript">
-			config.session = 'off';
-			function doLogin() {
-				switch(config.session){
-				case 'off':
-					document.sendin.username.value = document.login.username.value;
-					document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
-					document.sendin.submit();
-					break;
-				case 'on':
-					params.user_id = config.user_id;
-					params.router_id = config.router_id;
-					params.username = document.login.username.value;
-					$.ajax({
-						url: config.server + '/api/session',
-						type: 'post',
-						data: JSON.stringify(params),
-						success: function(result){
-							document.sendin.username.value = document.login.username.value;
-							document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
-							document.sendin.submit();
-							console.log(result);
-						},
-						error: function(err){
-							console.log(err); 
-							document.sendin.username.value = document.login.username.value;
-							document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
-							document.sendin.submit();
-						}
-					});
-					return false;
-					break;
-				}
-				return false;
-			}
-		</script>
-		$(endif)
-	</div>
+        function show_confirm(options) {
+            $('#confirm').show();
+            $('#confirm_title').html(options.title);
+            $('#confirm_text').html(options.text);
+        }
 
-	<div class="main theme">
-		<div class="theme" style="min-height: 150px;">
-			<br>
-			<div class="bar margin-bottom">
-				<a class="bar-item small" href="login.html"><i class="icon">&#xe806;</i> <span id="date">2025-03-10</span><br><i class="icon">&#xe805;</i> <b id="time">10:30:01 PM</b></a>
-				<a href="intent://$(ip)#Intent;scheme=http;package=com.android.chrome;end" class="bar-item right small"><i class="icon icon-large">&#xf268;</i></a>
-			</div>
+        function hide_alert(){$('#alert').hide();}
 
-			<div class="row border round border-theme margin-top margin-bottom">
-				<div class="col s3 center">
-					<a href="#" id="btn_mode" state="voucher" class="button small padding-small hover-none">
-						<i class="icon icon-large">&#xf0ec;</i><br>
-						<span class="small">Mode</span>
-					</a>
-				</div>
-				<div class="col s3 center">
-					<a href="#" id="btn_register" class="button small padding-small hover-none">
-						<i class="icon icon-large">&#xf2be;</i></i><br>
-						<span class="small">Pendaftaran</span>
-					</a>
-				</div>
-				<div class="col s3 center">
-					<a href="#" id="btn_help" class="button small padding-small hover-none">
-						<i class="icon icon-large">&#xe807;</i></i><br>
-						<span class="small">Bantuan</span>
-					</a>
-				</div>
-				<div class="col s3 center">
-					<a href="#" id="btn_contact" class="button small padding-small hover-none">
-						<i class="icon icon-large">&#xf230;</i></i><br>
-						<span class="small">Kontak</span>
-					</a>
-				</div>
-			</div>
+        function close_all() {
+            $.each(page, function(x, r) {
+                $(page[x]).addClass('hide');
+                $(page[x]).removeClass('animate-bottom');
+            });
+        }
+        function show_page(x) {
+            close_all();
+            $(page[x]).removeClass('hide');
+            $(page[x]).addClass('animate-bottom');
+        }
+        show_page(0);
+        
+        function sync(){user.value = user.value;pass.value = user.value;}
 
-			<div class="padding-small white margin-top" style="border-top-left-radius: 25px; border-top-right-radius: 25px;">
-				<table>
-					<tr>
-						<td style="vertical-align: middle; text-align:center; width: 60px;">
-							<img id="logo" src="assets/images/logo.png" width="50" height="50" style="border-radius: 50%;">
-						</td>
-						<td>
-							<b id="serverName">Name</b><br>
-							<i class="text-gray">Internet Service Provider</i>
-						</td>
-					</tr>
-				</table>
+        user.onkeyup = sync;
+        user.onchange = sync;
+        var serverinfo;
+        
+        function checkout(product_id){$('#product_id').html(product_id);$('#checkout').show();}
 
-				<div class="display-middle topbar border border-red white round" id="error" style="min-width:300px; max-width: 300px; display: none;">
-					<h3 align="center" class="text-red">Error!</h3>
-					<p align="center">$(error)</p>
-					<p align="center"><button onclick="$('#error').hide()" class="button red round">OK</button></p>
-				</div>
-				<form name="login" action="$(link-login-only)" method="post" $(if chap-id) onSubmit="return doLogin()" $(endif)>
-					<input type="hidden" name="dst" value="$(link-orig)">
-					<input type="hidden" name="popup" value="true">
+        function confirm_order() {
+            var product_id = $('#product_id').html();
+            var fullname = $('#fullname').val().split(' ');
+            var first_name = fullname[0] !== null ? fullname[0]: '';
+            var last_name = fullname[1] !== null ? fullname[1]: '';
+            var phone = $('#phone').val();
+            if (first_name.length > 1) {
+                if (phone.length > 10 && phone.length < 16) {
+                    params.product_id = product_id;
+                    params.first_name = first_name;
+                    params.last_name = last_name;
+                    params.phone = phone;
+                    params.email = '';
+                    $.ajax({
+                        type: 'POST',
+                        url: server + '/api/checkout',
+                        data: JSON.stringify(params),
+                        success: function(result) {
+                            console.log(result);
+                            if (result.qr_string) {
+                                new QRCode('qrcode', result.qr_string);
+                                $('#expiry_time').html(result.expiry_time);
+                                $('#frmCheckout').addClass('hide');
+                                $('#frmConfirm').removeClass('hide');
+                                check_status(result.order_id);
+                            }
+                        },
+                        error: function() {
+                            $('#checkout').hide();
+                            show_alert({
+                                title: 'ERROR',
+                                text: 'Gagal membuat pesanan, Silahkan coba lagi nanti.'
+                            });
+                        }
+                    });
+                } else {
+                    $('#iWhatsApp').addClass('border-red');
+                    $('#iWhatsApp').focus();
+                }
+            } else {
+                $('#iFullName').addClass('border border-red');
+                $('#fullname').focus();
+            }
+        }
 
-					<p align="center">Silahkan masukan kode voucher anda.</p>
+        function check_status(order_id) {
+            params.order_id = order_id;
+            $.ajax({
+                url: server + '/api/status',
+                type: 'POST',
+                data: JSON.stringify(params),
+                success: function(result) {
+                    console.log(result);
+                    if (result.status == 'pending') {
+                        setTimeout(function() {
+                            check_status(order_id);
+                        }, 3000);
+                    } else {
+                        if (result.voucher !== '') {
+                            try{
+                                localStorage.setItem('username', result.voucher);
+                                localStorage.setItem('password', result.voucher);
+                            } catch(error){}
+                            window.location.href = "$(link-login-only)?username=" + result.voucher + "&password=" + result.voucher;
+                        }
+                    }
+                },
+                error: function(err) {
+                    console.log(err);
+                    check_status(order_id);
+                }
+            });
+        }
 
-					<input type="text" id="username" style="text-align: center; font-weight: 900;" name="username" placeholder="Kode Voucher" class="input border text-theme border-theme theme-l4 round margin-bottom" autocomplete="off" required>
-					<input type="hidden" id="password" name="password" placeholder="Password" class="input border theme-l4 round margin-bottom" autocomplete="off" required>
-					<button id="btnLogin" class="button block theme round margin-bottom"><i class="icon">&#xe803;</i> Masuk</button>
-				</form>
-				
-				<div id="notice" class="margin-bottom"></div>
-				<div id="product" class="row margin-bottom"></div>
-				<div id="slideshow" class="content margin-bottom margin-top" style="width: 100%;"></div>
-				
-			</div>
-		</div>
-	</div>
+        function get_info() {
+            $('#name').html('Getting server info..');
+            $.ajax({
+                url: server+'/api/info',
+                type: 'POST',
+                data: JSON.stringify(params),
+                success: function(info) {
+                    console.log(info);
+                    //$('#cp_logo').attr('src', info.logo !== '' ? server + '/assets/upload/' + info.logo: 'assets/images/logo.png');
+                    $('#cp_name').html(info.name);
+                    $('#cp_address').html(info.address);
+                    $('#cp_email').html(info.email);
+                    $('#cp_phone').html(info.phone);
+                    $('title').html(info.name);
+                    config.session = info.session;
+                    config.login = info.login;
+                    serverinfo = info;
+                    if (info.color == 'random') {
+                        var color = [
+                            'theme-blue.css',
+                            'theme-deep-purple.css',
+                            'theme-green.css',
+                            'theme-indigo.css',
+                            'theme-light-green.css',
+                            'theme-pink.css',
+                            'theme-purple.css',
+                            'theme-red.css',
+                            'theme-teal.css'
+                        ];
+                        var num = Math.floor(Math.random() * color.length);
+                        //alert(num);
+                        $('#theme').attr('href', 'assets/css/' + color[num]);
+                    } else {
+                        $('#theme').attr('href', 'assets/css/' + info.color);
+                    }
+                    if (info.login == 'on') {
+                        try{
+                            var dbUser = localStorage.getItem('username');
+                            var dbPass = localStorage.getItem('password');
+                            $('#username').val(dbUser);
+                            $('#password').val(dbPass);
+                            if (dbUser !== null) {
+                                if (info.confirm == 'on') {
+                                    show_confirm({
+                                        title: 'Konfirmasi',
+                                        text: 'Perangkat anda telah login menggunakan kode voucher <b class="text-red">' + dbUser + '</b> sebelumnya. Apakah anda ingin melanjutkan login menggunakan kode voucher tersebut?'
+                                    });
+                                } else {
+                                    start_session();
+                                }
+                            }
+                        } catch(error){}
+                    }
+                    get_product();
+                },
+                error: function(err) {
+                    show_alert({
+                        title: 'ERROR',
+                        text: 'Gagal memuat informasi server..'
+                    });
+                    setTimeout(function() {
+                        get_info();
+                    }, 1000);
+                }
+            });
+        }
 
-	<script type="text/javascript">
-		config.session = 'off';
-		var params = {}
-		params.user_id = config.user_id;
-		params.router_id = config.router_id;
+        function get_product() {
+            $('#name').html('Loading product list..');
+            $.ajax({
+                url: server+'/api/product',
+                type: 'POST',
+                data: JSON.stringify(params),
+                success: function(product) {
+                    console.log(product);
+                    var interval = 1;
+                    $.each(product, function(x, r) {
+                        setTimeout(function() {
+                            $('#product').append(`
+                                <div class="animate-zoom col s6 small" style="padding:1px">
+                                <div class="border border-theme round">
+                                <div class="theme padding-small round">
+                                <span class="right badge theme-d3">Rp ${r.price}</span>
+                                <i class="fa fa-ticket"></i> ${r.name}
+                                </div>
+                                <div class="padding-small light-gray">
+                                Batas Durasi : ${r.limit_uptime}<br>
+                                Batas Kuota : ${r.limit_bytes}
+                                </div>
+                                <div class="padding-small display-container light-gray">
+                                <button onclick="checkout('${r.product_id}')" class="button round right theme small padding-small"><i class="fa fa-shopping-cart"></i> Beli</button>
+                                <br><br>
+                                </div>
+                                </div>
+                                </div>
+                                `);
+                        }, interval);
+                        interval = eval(interval+500);
+                    });
+                    get_notice();
+                },
+                error: function(err) {
+                    show_alert({
+                        title: 'ERROR',
+                        text: 'Gagal memuat daftar produk..'
+                    });
+                    setTimeout(function() {
+                        get_product();
+                    }, 1000);
+                }
+            });
+        }
 
-		var slideIndex = 1;
-		function plusDivs(n){showDivs(slideIndex += n);}
-		function currentDiv(n){showDivs(slideIndex = n);}
-		function showDivs(n){
-			var i; var x = document.getElementsByClassName("mySlides");
-			if (n > x.length) {slideIndex = 1;}
-			if (n < 1) {slideIndex = x.length;}
-			for (i = 0; i < x.length; i++) {x[i].style.display = "none";}
-				x[slideIndex - 1].style.display = "block";
-		}
+        function get_notice() {
+            $('#name').html('Loading notice update..');
+            $.ajax({
+                url: server+'/api/notice',
+                type: 'POST',
+                data: JSON.stringify(params),
+                success: function(notice) {
+                    console.log(notice);
+                    var interval = 1;
+                    $.each(notice, function(x, r) {
+                        setTimeout(function() {
+                            $('#notice').append(`
+                                <div class="animate-bottom border border-theme margin-bottom light-gray">
+                                <div class="theme round padding-small">
+                                <i class="fa fa-bullhorn"></i> ${r.title}
+                                </div>
+                                <div class="padding-small">${r.content}</div>
+                                </div>
+                                `);
+                        }, interval);
+                        interval = eval(interval+500);
+                    });
+                    get_images();
+                },
+                error: function(err) {
+                    show_alert({
+                        title: 'ERROR',
+                        text: 'Gagal memuat data pengumuman..'
+                    });
+                    setTimeout(function() {
+                        get_notice();
+                    });
+                }
+            });
+        }
 
-		function get_info(){
-			$.ajax({
-				url: config.server + '/api/info',
-				type: 'post',
-				data: JSON.stringify(params),
-				success: function(result){
-					console.log(result);
-					config.session = result.session;
-					$('#color').attr('href', 'assets/css/' + result.color);
-					var date = new Date();
-					today = date.getMonth() + "-" + date.getDate();
-					if(typeof result.logo !== undefined){ $('#logo').attr('src', 'https://niceportal.net/assets/upload/' + result.logo + '?load=' + today)}
-					$('#serverName').html(result.name);
-					get_product();
-				},
-				error: function(err){
-					console.log(err); 
-					alert('get_info failed.');
-				}
-			});
-		}
+        function get_images() {
+            $('#name').html('Loading images..');
+            $.ajax({
+                url: server+'/api/slideshow',
+                type: 'POST',
+                data: JSON.stringify(params),
+                success: function(images) {
+                    console.log(images);
 
-		function get_product(){
-			$.ajax({
-				url: config.server + '/api/product',
-				type: 'post',
-				data: JSON.stringify(params),
-				success: function(result){
-					console.log(result);
-					$.each(result, function(index, row){
-						$('#product').append(`
-								<div class="col s6" style="padding:1px">
-									<div class="round topbar border border-theme theme-l5 padding-small">
-										<a href="checkout.html?product_id=${row.product_id}" class="right buttom small theme padding-small round"><i class="icon">&#xe801;</i> Beli</a>
-										<b class="text-theme">${row.name}</b><br>
-										<i> Rp ${row.price}</i>
-									</div>
-								</div>
-						`);
-					});
-					get_images();
-				},
-				error: function(err){
-					console.log(err);
-					alert('get_product failed');
-				}
-			});
-		}
+                    $('#name').html(serverinfo.name);
+                    $('#signal').attr('class', 'fa fa-wifi');
+                },
+                error: function(err) {
+                    show_alert({
+                        title: 'ERROR',
+                        text: 'Gagal memuat data gambar..'
+                    });
+                    setTimeout(function() {
+                        get_images();
+                    }, 1000);
+                }
+            });
+        }
 
-		function get_images(){
-			$.ajax({
-				url: config.server + '/api/slideshow',
-				type: 'post',
-				data: JSON.stringify(params),
-				success: function(result){
-					console.log(result);
-					$.each(result, function(index, row){
-						$('#slideshow').append(`<img class="mySlides border border-theme round" src="${config.server}/assets/upload/${row.file}" style="width:100%">`);
-					});
-					showDivs(slideIndex);
-					setInterval(function() {
-						plusDivs(+1);
-					}, 3000);
-					get_notice();
-				},
-				error: function(err){
-					console.log(err);
-					alert('get_images failed');
-				}
-			});
-		}
+        function start_session() {
+            if (config.session == 'on') {
+                params.username = $('#username').val();
+                $.ajax({
+                    type: 'POST',
+                    url: server + '/api/session',
+                    data: JSON.stringify(params),
+                    success: function(result) {
+                        window.location.href = "$(link-login-only)?username=" + $('#username').val() + "&password=" + $('#password').val();
+                    }, error: function(err) {
+                        start_session();
+                    }
+                });
+            } else {
+                window.location.href = "$(link-login-only)?username=" + $('#username').val() + "&password=" + $('#password').val();
+            }
+        }
 
-		function get_notice(){
-			$.ajax({
-				url: config.server + '/api/notice',
-				type: 'post',
-				data: JSON.stringify(params),
-				success: function(result){
-					console.log(result);
-					$.each(result, function(index, row){
-						$('#notice').append(`
-								<div class="small border border-theme round">
-									<div class="theme padding-small"><b><i class="icon">&#xe807;</i> ${row.title}</b></div>
-									<div class="padding-small text-gray">${row.content}</div>
-								</div>
-						`);
-					})
-				},
-				error: function(err){
-					console.log(err);
-					alert('get_notice failed');
-				}
-			});
-		}
+        $(document).ready(function() {
+            $(nav[0]).addClass('theme');
+            $.each(nav, function(x, r) {
+                $(nav[x]).on('click', function() {
+                    for (y = 0; y < nav.length; y++) {
+                        $(nav[y]).removeClass('animate-top');
+                        $(nav[y]).removeClass('theme');
+                    }
+                    $(this).addClass('theme');
+                    $(this).addClass('animate-top');
+                });
+            });
 
-		var user = document.getElementById('username');
-		var pass = document.getElementById('password');
-		function setpsw(){user.value = user.value; pass.value = user.value;}
+            $('#btnVoucher').on('click', function() {
+                user.onkeyup = sync;
+                user.onchange = sync;
+                user.placeholder = 'Kode Voucher';
 
-		user.onkeyup = setpsw;
-		user.onchange = setpsw;
+                $('#login_txt').html('Silahkan masukan kode voucher anda');
+                $('#iPassword').addClass('hide');
+                show_page(0);
+            });
 
-		$(document).ready(function(){
-			get_info();
+            $('#btnMember').on('click', function() {
+                user.onkeyup = '';
+                user.onchange = '';
+                user.placeholder = 'Username';
 
-				// buttom mode
-			$('#btn_mode').on('click', function(){
-				var state = this.getAttribute('state');
-				switch(state){
-				case 'voucher': 
-					user.placeholder = 'Username';
-					user.onkeyup = '';
-					user.onchange = '';
-					pass.type = 'password';
-					this.setAttribute('state', 'member');
-					break;
-				case 'member':
-					user.placeholder = 'Kode Voucher';
-					user.onkeyup = setpsw;
-					user.onchange = setpsw;
-					pass.type = 'hidden';
-					this.setAttribute('state', 'voucher');
-					break;
-				}
-			});
+                $('#login_txt').html('Silahkan masukan username dan password anda');
+                $('#iPassword').removeClass('hide');
+                show_page(0);
+            });
 
-			$('#btn_register').on('click', function(){window.location.href = 'registration.html';});
-			$('#btn_help').on('click', function(){window.location.href = 'help.html';});
-			$('#btn_contact').on('click', function(){window.location.href = 'contact.html';});
-		});
+            $('#btnRegistration').on('click', function() {
+                show_page(1);
+            });
 
+            $('#btnSubmit').on('click', function() {
+                var id_card = $('#reg_id_card').val();
+                var first_name = $('#reg_first_name').val();
+                var last_name = $('#reg_last_name').val();
+                var phone = $('#reg_phone').val();
+                var address = $('#reg_address').val();
+                if (
+                    id_card.length == 16 && isNumeric(id_card) == true && first_name.length > 1 && first_name.length < 16 && last_name.length > 1 && last_name.length < 16 && isNumeric(phone) == true && phone.length > 9 && phone.length < 16 && address.length > 3) {
+                    var params = {}
+                    params.user_id = config.user_id;
+                    params.router_id = config.router_id;
+                    params.id_card = id_card;
+                    params.first_name = first_name;
+                    params.last_name = last_name;
+                    params.phone = phone;
+                    params.address = address;
+                    $.ajax({
+                        url: 'http://niceportal.net/api/registration',
+                        type: 'POST',
+                        data: JSON.stringify(params),
+                        success: function(result) {
+                            if (result.status == 'error') {
+                                show_alert({
+                                    title: 'ERROR',
+                                    text: result.message
+                                });
+                            } else {
+                                show_alert({
+                                    title: 'Success',
+                                    text: 'Terima Kasih!<br>Pendftaran anda telah kami terima, Kami akan segera menghubungi anda dalam waktu paling lambat 1x24 jam.'
+                                });
+                                window.location.href = "login.html";
+                            }
+                        },
+                        error: function(err) {
+                            console.log(err);
+                        }
+                    });
+                } else {
+                    show_alert({
+                        title: 'ERROR',
+                        text: 'Harap lengkapi formulir pendaftaran dengan data yang sesuai.'
+                    });
+                }
+            });
 
-		function showTime() {
-			var a_p = "";
-			var today = new Date();
-			var curr_hour = today.getHours();
-			var curr_minute = today.getMinutes();
-			var curr_second = today.getSeconds();
-			if (curr_hour < 12) {
-				a_p = "AM";
-			} else {
-				a_p = "PM";
-			}
-			if (curr_hour == 0) {
-				curr_hour = 12;
-			}
-			if (curr_hour > 12) {
-				curr_hour = curr_hour - 12;
-			}
-			curr_hour = checkTime(curr_hour);
-			curr_minute = checkTime(curr_minute);
-			curr_second = checkTime(curr_second);
-			$("#time").html(curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p);
-		}
+            $('#btnContact').on('click',function(){show_page(2);});
 
-		function checkTime(i) {
-			if (i < 10) {
-				i = "0" + i;
-			}
-			return i;
-		}
-		setInterval(showTime, 500);
+            $('#btnLogin').on('click',function() {
+                if ($('#username').val() == '') {
+                    $('#iVoucher').addClass('border border-red');
+                    $('#username').focus();
+                } else {
+                    try{
+                        localStorage.setItem('username', $('#username').val());
+                        localStorage.setItem('password', $('#password').val());
+                        start_session();
+                    } catch(error){
+                        start_session();
+                    }
+                }
+            });
 
-		var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-		var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
-		var date = new Date();
-		var day = date.getDate();
-		var month = date.getMonth();
-		var thisDay = date.getDay(),
-		thisDay = myDays[thisDay];
-		var yy = date.getYear();
-		var year = (yy < 1000) ? yy + 1900 : yy;
-		$("#date").html(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
-	</script>
-	<div class="hide">$(if error)<script type="text/javascript">$('#error').show();</script>$(endif)</div>
+            user.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    if ($('#username').val() == '') {
+                        $('#iVoucher').addClass('border border-red');
+                        $('#username').focus();
+                    } else {
+                        try{
+                            localStorage.setItem('username', $('#username').val());
+                            localStorage.setItem('password', $('#password').val());
+                            start_session();
+                        } catch(error){
+                            start_session();
+                        }
+                    }
+                }
+            });
+
+            pass.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    if ($('#username').val() == '') {
+                        $('#iVoucher').addClass('border border-red');
+                        $('#username').focus();
+                    } else {
+                        try{
+                            localStorage.setItem('username', $('#username').val());
+                            localStorage.setItem('password', $('#password').val());
+                            start_session();
+                        } catch (error){
+                            start_session();
+                        }
+                    }
+                }
+            });
+
+            $('#btnConfirm').on('click',function(){start_session();});
+            $('#btnReject').on('click',function() {
+                try{localStorage.clear();} catch(error){}
+
+                $('#username').val('');
+                $('#password').val('');
+                $('#confirm').addClass('hide');
+            });
+            get_info();
+        });
+    </script>
+    <div class="hide">
+        $(if error)
+        <script type="text/javascript">
+            try{localStorage.clear();} catch(error){}
+            show_alert({
+                title: 'ERROR',
+                text: '$(error)',
+            });
+        </script>
+        $(endif)
+    </div>
 </body>
 </html>

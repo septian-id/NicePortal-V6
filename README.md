@@ -1,8 +1,6 @@
 # NicePortal-V6
 Login Page NicePortal V6
 
-![alt text](demo.jpg)
-
 Sesuaikan file config.js sebelum digunakan, 
 Anda harus menggunakan user_id dan router_id anda sendiri.
 Untuk mendapakan user_id dan router_id silahkan kunjungi website https://niceportal.net

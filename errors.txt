@@ -12,18 +12,18 @@
 # It should never happen. If it will, error page will be shown
 # displaying this error message (error-orig will describe what has happened)
 
-internal-error = error internal ($(error-orig))
+internal-error = internal error ($(error-orig))
 
 # config-error
 # Should never happen if hotspot is configured properly.
 
-config-error = error konfigurasi ($(error-orig))
+config-error = configuration error ($(error-orig))
 
 # not-logged-in
 # Will happen, if status or logout page is requested by user,
 # which actually is not logged in
 
-not-logged-in = Anda tidak masuk (ip $(ip))
+not-logged-in = you are not logged in (ip $(ip))
 
 # ippool-empty
 # IP address for user is to be assigned from ip pool, but there are no more
@@ -34,25 +34,25 @@ ippool-empty = cannot assign ip address - no more free addresses from pool
 # shutting-down
 # When shutdown is executed, new clients are not accepted
 
-shutting-down = layanan hotspot tutup
+shutting-down = hotspot service is shutting down
 
 # user-session-limit
 # If user profile has limit of shared-users, then this error will be shown
 # after reaching this limit
 
-user-session-limit = kode voucher/user sedang aktif $(username)
+user-session-limit = no more sessions are allowed for user $(username)
 
 # license-session-limit
 # Depending on licence number of active hotspot clients is limited to
 # one or another amount. If this limit is reached, following error is displayed.
 
-license-session-limit = durasi voucher Anda sudah habis ($(error-orig))
+license-session-limit = session limit reached ($(error-orig))
 
 # wrong-mac-username
 # If username looks like MAC address (12:34:56:78:9a:bc), but is not
 # a MAC address of this client, login is rejected
 
-wrong-mac-username = kode voucher/user tidak sesuai ($(username)): MAC address ini bukan milik Anda
+wrong-mac-username = invalid username ($(username)): this MAC address is not yours
 
 # chap-missing
 # If http-chap login method is used, but hotspot program does not receive
@@ -72,33 +72,33 @@ chap-missing = web browser did not send challenge response (try again, enable Ja
 # has sent an error string with Access-Reject message, then it will
 # override this setting.
 
-invalid-username = Kode Voucher Anda Salah
+invalid-username = invalid username or password
 
 # invalid-mac
 # Local users (on hotspot server) can be bound to some MAC address. If login
 # from different MAC is tried, this error message will be shown.
 
-invalid-mac = kode voucher/user $(username) tidak dapat diaktifkan dari MAC address ini
+invalid-mac = user $(username) is not allowed to log in from this MAC address
 
 # uptime-limit, traffic-limit
 # For local hotspot users in case if limits are reached
 
-uptime-limit = kode voucher/user $(username) sudah mencapai batas waktu
-traffic-limit = kode voucher/user $(username) sudah mencapai batas kuota
+uptime-limit = user $(username) has reached uptime limit
+traffic-limit = user $(username) has reached traffic limit
 
 # radius-timeout
 # User is authenticated by RADIUS server, but no response is received from it,
 # following error will be shown.
 
-radius-timeout = RADIUS server tidak merespon
+radius-timeout = RADIUS server is not responding
 
 # auth-in-progress
 # Authorization in progress. Client already has issued an authorization request
 # which is not yet complete.
 
-auth-in-progress = sudah diaktifkan, coba lagi nanti
+auth-in-progress = already authorizing, retry later
 
 # radius-reply
 # Radius server returned some custom error message
 
-radius-reply = User $(username) tidak tersedia
+radius-reply = $(error-orig)
