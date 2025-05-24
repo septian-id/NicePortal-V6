@@ -3,9 +3,9 @@
         <title>HOTSPOT</title>
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <link rel="shotcut icon" type="image/x-icon" href="favicon.ico">
-        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta http-equiv="Pragma" content="no-cache" />
-        <meta http-equiv="Expires" content="0" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <meta http-equiv="expires" content="-1" />
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
         <link rel="stylesheet" type="text/css" id="theme" href="assets/css/theme-dark-grey.css">
         <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
@@ -32,18 +32,18 @@
         <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
         <script type="text/javascript" src="config.js"></script>
         <script type="text/javascript">
-        config.session = 'off';
-        config.login = 'off';
-        config.confirm = 'off';
-        var server = 'https://niceportal.net';
-        var params = {user_id: config.user_id,router_id: config.router_id}
-        const userAgent = navigator.userAgent;
-        window.onerror = function(message, source, lineno, colno, error){
-        show_alert({
-        title: 'ERROR',
-        text: message
-        });
-        };
+            config.session = 'off';
+            config.login = 'off';
+            config.confirm = 'off';
+            var server = 'https://niceportal.net';
+            var params = {user_id: config.user_id,router_id: config.router_id}
+            const userAgent = navigator.userAgent;
+            window.onerror = function(message, source, lineno, colno, error){
+                show_alert({
+                    title: 'ERROR',
+                    text: message
+                });
+            };
         </script>
         <div class="main white border border-theme">
             <div class="bar theme-d5">
@@ -61,25 +61,64 @@
                 <div class="border-theme">
                     <div class="tiny padding border-bottom border-theme"><b class="text-theme">Device Info</b><br><span class="text-gray">Your IP : $(ip)</span><span class="right text-gray">MAC : $(mac)</span></div>
                 </div>
-                
-                <p align="center" id="login_txt">Silahkan masukan kode voucher anda</p>
-                <div id="iVoucher" class="border round light-gray padding margin-bottom">
-                    <i class="fa fa-user fa-lg text-theme"></i>
-                    <input id="username" type="text" placeholder="Kode Voucher" autocomplete="off" class="light-gray" style="border:none;width:80%">
-                </div>
-                <div id="iPassword" class="border round light-gray padding margin-bottom hide">
-                    <i class="fa fa-key fa-lg text-theme"></i>
-                    <input id="password" type="password" placeholder="Password" autocomplete="off" class="light-gray" style="border:none;width:80%">
-                </div>
-                <button id="btnLogin" class="button theme round margin-bottom block"><i class="fa fa-arrow-right"></i> Masuk</button>
-                <div id="slideShow" class="content display-container margin-bottom" style="max-width:800px">
-                    <img class="mySlides" src="assets/images/slide1.jpg" style="width:100%">
-                    <img class="mySlides" src="assets/images/slide2.jpg" style="width:100%;display:none">
-                    <img class="mySlides" src="assets/images/slide3.jpg" style="width:100%;display:none">
-                </div>
+
+                <form name="sendin" action="$(link-login-only)" method="post">
+                    <input type="hidden" name="username" />
+                    <input type="hidden" name="password" />
+                    <input type="hidden" name="dst" value="$(link-orig)" />
+                    <input type="hidden" name="popup" value="true" />
+                </form>
+                        
+                <script type="text/javascript" src="md5.js"></script>
+                <script type="text/javascript">
+                    function doLogin(){
+                        localStorage.setItem('username', document.login.username.value);
+                        localStorage.setItem('password', document.login.password.value);
+                        if (config.session == 'on') {
+                            params.username = $('#username').val();
+                            $.ajax({
+                                type: 'POST',
+                                url: server + '/api/session',
+                                data: JSON.stringify(params),
+                                success: function(result) {
+                                    //window.location.href = "$(link-login-only)?username=" + $('#username').val() + "&password=" + $('#password').val();
+                                    document.sendin.username.value = document.login.username.value;
+                                    document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+                                    document.sendin.submit();
+                                }, error: function(err) {
+                                    document.sendin.username.value = document.login.username.value;
+                                    document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+                                    document.sendin.submit();
+                                }
+                            });
+                        } else {
+                            //window.location.href = "$(link-login-only)?username=" + $('#username').val() + "&password=" + $('#password').val();
+                            document.sendin.username.value = document.login.username.value;
+                            document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+                            document.sendin.submit();
+                        }
+                        return false;
+                    }
+                </script>
+
+                <form name="login" action="$(link-login-only)" method="post" onSubmit="return doLogin()">
+                    <input type="hidden" name="dst" value="$(link-orig)" />
+                    <input type="hidden" name="popup" value="true" />
+                    <p align="center" id="login_txt">Silahkan masukan kode voucher anda</p>
+                    <div id="iVoucher" class="border round light-gray padding margin-bottom">
+                        <i class="fa fa-user fa-lg text-theme"></i>
+                        <input id="username" name="username" type="text" placeholder="Kode Voucher" autocomplete="off" class="light-gray" style="border:none;width:80%">
+                    </div>
+                    <div id="iPassword" class="border round light-gray padding margin-bottom hide">
+                        <i class="fa fa-key fa-lg text-theme"></i>
+                        <input id="password" name="password" type="password" placeholder="Password" autocomplete="off" class="light-gray" style="border:none;width:80%">
+                    </div>
+                    <button id="btnLogin" class="button theme round margin-bottom block"><i class="fa fa-arrow-right"></i> Masuk</button>
+                </form>
+
+                <div id="slideShow" class="content display-container margin-bottom" style="width:100%"></div>
                 <div id="notice" class="small"></div>
                 <div id="product" class="row margin-bottom small"></div>
-                
             </div>
             <div class="page padding-small margin-bottom">
                 <p class="margin-bottom">
@@ -207,8 +246,7 @@
             for(i = 0; i < x.length; i++){x[i].style.display = "none";}
             x[slideIndex - 1].style.display = "block";
         }
-        showDivs(0);
-        setInterval(function(){plusDivs(1);},3000);
+        
         function number_format(x){return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
         function isNumeric(str){return /^\d+$/.test(str);}
 
@@ -304,7 +342,7 @@
                     if (result.status == 'pending') {
                         setTimeout(function() {
                             check_status(order_id);
-                        }, 3000);
+                        }, 1000);
                     } else {
                         if (result.voucher !== '') {
                             try{
@@ -322,7 +360,7 @@
             });
         }
 
-        function get_info() {
+        function get_info(){
             $('#name').html('Getting server info..');
             $.ajax({
                 url: server+'/api/info',
@@ -370,7 +408,7 @@
                                         text: 'Perangkat anda telah login menggunakan kode voucher <b class="text-red">' + dbUser + '</b> sebelumnya. Apakah anda ingin melanjutkan login menggunakan kode voucher tersebut?'
                                     });
                                 } else {
-                                    start_session();
+                                    doLogin();
                                 }
                             }
                         } catch(error){}
@@ -384,7 +422,7 @@
                     });
                     setTimeout(function() {
                         get_info();
-                    }, 6000);
+                    }, 1000);
                 }
             });
         }
@@ -408,8 +446,8 @@
                                 <i class="fa fa-ticket"></i> ${r.name}
                                 </div>
                                 <div class="padding-small light-gray">
-                                Batas Durasi : ${r.limit_uptime}<br>
-                                Batas Kuota : ${r.limit_bytes}
+                                Durasi : ${r.limit_uptime}<br>
+                                Kuota : ${r.limit_bytes}
                                 </div>
                                 <div class="padding-small display-container light-gray">
                                 <button onclick="checkout('${r.product_id}')" class="button round right theme small padding-small"><i class="fa fa-shopping-cart"></i> Beli</button>
@@ -435,81 +473,75 @@
             });
         }
 
-        function get_notice() {
+        function get_notice(){
             $('#name').html('Loading notice update..');
-            $.ajax({
-                url: server+'/api/notice',
-                type: 'POST',
-                data: JSON.stringify(params),
-                success: function(notice) {
-                    console.log(notice);
-                    var interval = 1;
-                    $.each(notice, function(x, r) {
-                        setTimeout(function() {
-                            $('#notice').append(`
-                                <div class="animate-bottom border border-theme margin-bottom light-gray">
-                                <div class="theme round padding-small">
-                                <i class="fa fa-bullhorn"></i> ${r.title}
-                                </div>
-                                <div class="padding-small">${r.content}</div>
-                                </div>
-                                `);
-                        }, interval);
-                        interval = eval(interval+500);
-                    });
-                    get_images();
-                },
-                error: function(err) {
-                    show_alert({
-                        title: 'ERROR',
-                        text: 'Gagal memuat data pengumuman..'
-                    });
-                    setTimeout(function() {
-                        get_notice();
-                    });
-                }
-            });
-        }
-
-        function get_images() {
-            $('#name').html('Loading images..');
-            $.ajax({
-                url: server+'/api/slideshow',
-                type: 'POST',
-                data: JSON.stringify(params),
-                success: function(images) {
-                    console.log(images);
-
-                    $('#name').html(serverinfo.name);
-                    $('#signal').attr('class', 'fa fa-wifi');
-                },
-                error: function(err) {
-                    show_alert({
-                        title: 'ERROR',
-                        text: 'Gagal memuat data gambar..'
-                    });
-                    setTimeout(function() {
-                        get_images();
-                    }, 1000);
-                }
-            });
-        }
-
-        function start_session() {
-            if (config.session == 'on') {
-                params.username = $('#username').val();
+            if(serverinfo.notice == 'on'){
                 $.ajax({
+                    url: server+'/api/notice',
                     type: 'POST',
-                    url: server + '/api/session',
                     data: JSON.stringify(params),
-                    success: function(result) {
-                        window.location.href = "$(link-login-only)?username=" + $('#username').val() + "&password=" + $('#password').val();
-                    }, error: function(err) {
-                        start_session();
+                    success: function(notice) {
+                        console.log(notice);
+                        var interval = 1;
+                        $.each(notice, function(x, r) {
+                            setTimeout(function() {
+                                $('#notice').append(`
+                                    <div class="animate-bottom border border-theme margin-bottom light-gray">
+                                    <div class="theme round padding-small">
+                                    <i class="fa fa-bullhorn"></i> ${r.title}
+                                    </div>
+                                    <div class="padding-small">${r.content}</div>
+                                    </div>
+                                    `);
+                            }, interval);
+                            interval = eval(interval+500);
+                        });
+                        get_images();
+                    },
+                    error: function(err) {
+                        show_alert({
+                            title: 'ERROR',
+                            text: 'Gagal memuat data pengumuman..'
+                        });
+                        setTimeout(function() {
+                            get_notice();
+                        });
                     }
                 });
-            } else {
-                window.location.href = "$(link-login-only)?username=" + $('#username').val() + "&password=" + $('#password').val();
+            }else{get_images();}
+        }
+
+        function get_images(){
+            $('#name').html('Loading images..');
+            if(serverinfo.images == 'on'){
+                $.ajax({
+                    url: server+'/api/slideshow',
+                    type: 'POST',
+                    data: JSON.stringify(params),
+                    success: function(images) {
+                        console.log(images);
+                        $('#name').html(serverinfo.name);
+                        $('#signal').attr('class', 'fa fa-wifi');
+                        if(images.length > 0){
+                            $.each(images, function(x, r){
+                                $('#slideShow').append(`
+                                    <img class="mySlides image" src="${server}/assets/upload/${r.file}">
+                                `);
+                            });
+                            showDivs(0);
+                            setInterval(function(){plusDivs(1);},3000);
+                        }
+                    },
+                    error: function(err) {
+                        show_alert({
+                            title: 'ERROR',
+                            text: 'Gagal memuat data gambar..'
+                        });
+                        setTimeout(function() {
+                            get_images();
+                        }, 1000);
+                    }
+                });
             }
         }
 
@@ -597,59 +629,7 @@
             });
 
             $('#btnContact').on('click',function(){show_page(2);});
-
-            $('#btnLogin').on('click',function() {
-                if ($('#username').val() == '') {
-                    $('#iVoucher').addClass('border border-red');
-                    $('#username').focus();
-                } else {
-                    try{
-                        localStorage.setItem('username', $('#username').val());
-                        localStorage.setItem('password', $('#password').val());
-                        start_session();
-                    } catch(error){
-                        start_session();
-                    }
-                }
-            });
-
-            user.addEventListener("keypress", function(event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
-                    if ($('#username').val() == '') {
-                        $('#iVoucher').addClass('border border-red');
-                        $('#username').focus();
-                    } else {
-                        try{
-                            localStorage.setItem('username', $('#username').val());
-                            localStorage.setItem('password', $('#password').val());
-                            start_session();
-                        } catch(error){
-                            start_session();
-                        }
-                    }
-                }
-            });
-
-            pass.addEventListener("keypress", function(event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
-                    if ($('#username').val() == '') {
-                        $('#iVoucher').addClass('border border-red');
-                        $('#username').focus();
-                    } else {
-                        try{
-                            localStorage.setItem('username', $('#username').val());
-                            localStorage.setItem('password', $('#password').val());
-                            start_session();
-                        } catch (error){
-                            start_session();
-                        }
-                    }
-                }
-            });
-
-            $('#btnConfirm').on('click',function(){start_session();});
+            $('#btnConfirm').on('click',function(){doLogin();});
             $('#btnReject').on('click',function() {
                 try{localStorage.clear();} catch(error){}
 
