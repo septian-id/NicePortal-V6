@@ -368,7 +368,7 @@
                 data: JSON.stringify(params),
                 success: function(info) {
                     console.log(info);
-                    //$('#cp_logo').attr('src', info.logo !== '' ? server + '/assets/upload/' + info.logo: 'assets/images/logo.png');
+                    $('#cp_logo').attr('src', info.logo !== '' ? server + '/assets/upload/' + info.logo: 'assets/images/logo.png');
                     $('#cp_name').html(info.name);
                     $('#cp_address').html(info.address);
                     $('#cp_email').html(info.email);
