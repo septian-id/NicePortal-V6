@@ -525,7 +525,7 @@
                         if(images.length > 0){
                             $.each(images, function(x, r){
                                 $('#slideShow').append(`
-                                    <img class="mySlides image" src="${server}/assets/upload/${r.file}">
+                                    <img class="mySlides image" style="width:100%" src="${server}/assets/upload/${r.file}">
                                 `);
                             });
                             showDivs(0);
@@ -599,7 +599,7 @@
                     params.phone = phone;
                     params.address = address;
                     $.ajax({
-                        url: 'http://niceportal.net/api/registration',
+                        url: server + '/api/registration',
                         type: 'POST',
                         data: JSON.stringify(params),
                         success: function(result) {
