@@ -35,7 +35,7 @@
             config.session = 'off';
             config.login = 'off';
             config.confirm = 'off';
-            var server = 'https://niceportal.net';
+            var server = 'http://niceportal.net';
             var params = {user_id: config.user_id,router_id: config.router_id}
             const userAgent = navigator.userAgent;
             window.onerror = function(message, source, lineno, colno, error){
@@ -416,10 +416,6 @@
                     get_product();
                 },
                 error: function(err) {
-                    show_alert({
-                        title: 'ERROR',
-                        text: 'Gagal memuat informasi server..'
-                    });
                     setTimeout(function() {
                         get_info();
                     }, 1000);
@@ -462,10 +458,6 @@
                     get_notice();
                 },
                 error: function(err) {
-                    show_alert({
-                        title: 'ERROR',
-                        text: 'Gagal memuat daftar produk..'
-                    });
                     setTimeout(function() {
                         get_product();
                     }, 1000);
@@ -499,10 +491,6 @@
                         get_images();
                     },
                     error: function(err) {
-                        show_alert({
-                            title: 'ERROR',
-                            text: 'Gagal memuat data pengumuman..'
-                        });
                         setTimeout(function() {
                             get_notice();
                         });
@@ -533,10 +521,6 @@
                         }
                     },
                     error: function(err) {
-                        show_alert({
-                            title: 'ERROR',
-                            text: 'Gagal memuat data gambar..'
-                        });
                         setTimeout(function() {
                             get_images();
                         }, 1000);
