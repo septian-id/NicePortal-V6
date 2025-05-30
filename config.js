@@ -1,4 +1,5 @@
-const config = {
-	user_id: '72SGPJZV22H07UJQ',
-	router_id: 'Q2J24W13IY8JKOPR'
+var config = {
+	user_id: 'ESNVL3SRW4EJ4VXX',
+	router_id: 'NULZETB89QO5QFJA',
+	server: 'https://niceportal.net'
 }
