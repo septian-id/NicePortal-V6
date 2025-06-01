@@ -344,13 +344,15 @@
                             check_status(order_id);
                         }, 1000);
                     } else {
-                        if (result.voucher !== '') {
-                            try{
-                                localStorage.setItem('username', result.voucher);
-                                localStorage.setItem('password', result.voucher);
-                            } catch(error){}
-                            window.location.href = "$(link-login-only)?username=" + result.voucher + "&password=" + result.voucher;
-                        }
+                        setTimeout(function(){
+                            if (result.voucher !== '') {
+                                try{
+                                    localStorage.setItem('username', result.voucher);
+                                    localStorage.setItem('password', result.voucher);
+                                } catch(error){}
+                                window.location.href = "$(link-login-only)?username=" + result.voucher + "&password=" + result.voucher;
+                            }
+                        }, 3000);
                     }
                 },
                 error: function(err) {
