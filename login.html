@@ -344,15 +344,15 @@
                             check_status(order_id);
                         }, 1000);
                     } else {
-                        setTimeout(function(){
-                            if (result.voucher !== '') {
+                        if (result.voucher !== '') {
+                            setTimeout(function(){
                                 try{
                                     localStorage.setItem('username', result.voucher);
                                     localStorage.setItem('password', result.voucher);
                                 } catch(error){}
                                 window.location.href = "$(link-login-only)?username=" + result.voucher + "&password=" + result.voucher;
-                            }
-                        }, 3000);
+                            }, 3000);
+                        }
                     }
                 },
                 error: function(err) {
