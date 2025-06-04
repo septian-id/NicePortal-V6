@@ -8,8 +8,7 @@ Untuk mendapakan user_id dan router_id silahkan kunjungi website https://nicepor
 ```js
 var config = {
 	user_id: 'USER ID ANDA',
-	router_id: 'ROUTER ID ANDA',
-	server: 'https://niceportal.net'
+	router_id: 'ROUTER ID ANDA'
 }
 ```
 
